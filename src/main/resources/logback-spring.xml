@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- 控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss}  [%thread]%logger{36} %line: %msg %n</Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- 日志文件-->
+    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>logs/trading.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>trading.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{35}%line: %msg %n</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- 将上面两个 appender 关联到我们的项目 -->
+    <!--TRACE, DEBUG, INFO, WARN, ERROR-->
+    <logger name="work.variety.trading" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="dailyRollingFileAppender"/>
+    </logger>
+
+    <!-- 其他框架的日志输出 -->
+    <property name="LOG_FILE" value="logs/trading-tmp.log"/>
+    <!-- spring web 包下的 logger, 只输出 INFO 级别的 -->
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springframework.boot.web.filter" level="DEBUG"/>
+
+</configuration>
