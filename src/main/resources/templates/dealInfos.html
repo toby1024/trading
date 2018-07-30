@@ -1,0 +1,132 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="webjars/jquery/3.1.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.datepicker-zh-CN.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.structure.min.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.theme.min.css"/>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/sticky-footer-navbar.css"/>
+    <script>
+        $(function () {
+            $("#startDate").datepicker();
+            $("#endDate").datepicker();
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">交易数据统计系统</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/position">持仓</a></li>
+                <li class="active"><a href="/deal">交易</a></li>
+                <li><a href="/upload">文件上传</a></li>
+
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<!-- Begin page content -->
+<div class="container">
+    <div class="page-header">
+        <h1>交易汇总</h1>
+    </div>
+    <div>
+        <form class="form-inline" action="/deal">
+            <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}">
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" class="form-control" id="name" name="name" th:value="${searchCondition.name}">
+            </div>
+            <div class="form-group">
+                <label for="startDate">交易日期</label>
+                <input type="text" class="form-control" id="startDate" name="startDate"
+                       th:value="${#dates.format(searchCondition.startDate,'yyyy-MM-dd')}"> -
+                <input type="text" class="form-control" id="endDate" name="endDate"
+                       th:value="${#dates.format(searchCondition.endDate,'yyyy-MM-dd')}">
+            </div>
+            <div class="form-group">
+                <label for="dealType">交易类型</label>
+                <select id="dealType" name="dealType" class="form-control" th:value="${searchCondition.dealType}">
+                    <option value="">全部</option>
+                    <option value="买">买</option>
+                    <option value="卖">卖</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+        </form>
+    </div>
+    <div>
+        <table class="table table-bordered">
+            <tr>
+                <th>姓名</th>
+                <th>交易时间</th>
+                <th>交易类型</th>
+                <th>成交手数</th>
+                <th>成交额</th>
+                <th>手续费</th>
+                <th>平仓盈亏</th>
+                <th>明细</th>
+            </tr>
+            <tr th:each="deal : ${page.list}">
+                <td th:text="${deal.name} "></td>
+                <td th:text="${#dates.format(deal.dealDate,'yyyy-MM-dd')} "></td>
+                <td th:text="${deal.dealType} "></td>
+                <td th:text="${deal.boardLot} "></td>
+                <td th:text="${deal.dealFee} "></td>
+                <td th:text="${deal.commission} "></td>
+                <td th:text="${deal.closeProfit} "></td>
+                <td><a href="deal/byContract" class="btn btn-info">明细</a></td>
+            </tr>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href="javaScript:void(0);" aria-label="Previous" th:onclick="'javascript:jump('+${page.prePage}+');'">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li th:each="pageNum:${#numbers.sequence(1, page.pages)}"  th:classappend="${pageNum eq page.pageNum} ? active : ''">
+                    <a href="javaScript:void(0);" th:onclick="'javaScript:jump('+${pageNum}+');'"
+                       th:text="${pageNum}" th:if="${pageNum < 11}"></a>
+                </li>
+                <li>
+                    <a href="javaScript:void(0);" aria-label="Next" th:onclick="'javascript:jump('+${page.nextPage}+');'">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+            <script th:inline="javascript">
+                function jump(page) {
+                    $("#pageNum").val(page);
+                    $("form")[0].submit();
+                }
+            </script>
+        </nav>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">交易查询系统</p>
+    </div>
+</footer>
+</body>
+</html>

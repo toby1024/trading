@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="work.variety.trading.dao.DealInfoMapper">
+
+  <resultMap id="dealInfo" type="work.variety.trading.entity.DealInfo">
+    <id column="id" property="id"></id>
+    <result column="deal_date" property="dealDate"/>
+    <result column="contract" property="contract"/>
+    <result column="deal_number" property="dealNumber"/>
+    <result column="deal_type" property="dealType"/>
+    <result column="speculate_hedging" property="speculateHedging"/>
+    <result column="deal_price" property="dealPrice"/>
+    <result column="board_lot" property="boardLot"/>
+    <result column="deal_fee" property="dealFee"/>
+    <result column="open_close" property="openClose"/>
+    <result column="commission" property="commission"/>
+    <result column="close_profit" property="closeProfit"/>
+    <result column="real_deal_date" property="realDealDate"/>
+    <result column="client_info_id" property="clientInfoId"/>
+  </resultMap>
+
+  <resultMap id="dealInfoStat" type="work.variety.trading.dto.DealInfoDto">
+    <result column="deal_date" property="dealDate"/>
+    <result column="name" property="name"/>
+    <result column="board_lot" property="boardLot"/>
+    <result column="close_profit" property="closeProfit"/>
+    <result column="commission" property="commission"/>
+    <result column="client_info_id" property="clientInfoId"/>
+    <result column="deal_type" property="dealType"/>
+    <result column="deal_fee" property="dealFee"/>
+  </resultMap>
+
+  <select id="list" resultMap="dealInfo">
+    SELECT * FROM deal_info order by deal_date desc
+  </select>
+
+  <sql id="searchSql">
+      SELECT a.client_info_id, DATE(a.deal_date) AS deal_date, b.name, a.deal_type, sum(deal_fee) AS deal_fee,
+            sum(close_profit) AS close_profit, sum(board_lot) AS board_lot, sum(commission) AS commission
+      FROM deal_info a LEFT JOIN client_info b ON a.client_info_id = b.id
+      <where>
+        <if test="name!=null and name != ''">
+          and b.name like concat('%', #{name}, '%')
+        </if>
+        <if test="startDate != null">
+          and a.deal_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+          and a.deal_date &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+        </if>
+        <if test="dealType != null and dealType !=''">
+          and a.deal_type = #{dealType}
+        </if>
+      </where>
+      GROUP BY client_info_id, DATE(deal_date), deal_type
+  </sql>
+  <select id="search" resultMap="dealInfoStat">
+    SELECT * FROM (
+     <include refid="searchSql"/>
+    ) c
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    LIMIT #{startPage}, #{pageSize}
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    SELECT count(*) from (
+      <include refid="searchSql"/>
+    ) c
+  </select>
+</mapper>

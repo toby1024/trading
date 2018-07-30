@@ -18,7 +18,7 @@ public interface ClientInfoMapper {
 
   @Insert("INSERT INTO client_info(futures_capital_number, name, company_name, stock_capital_number)" +
     "VALUES(#{futuresCapitalNumber},#{name},#{companyName},#{stockCapitalNumber})")
-  @Options(useGeneratedKeys = true, keyProperty = "client_info.id")
+  @Options(useGeneratedKeys = true, keyProperty = "id")
   int save(ClientInfo clientInfo);
 
   @Select("SELECT * FROM client_info WHERE futures_capital_number = #{futuresCapitalNumber}")

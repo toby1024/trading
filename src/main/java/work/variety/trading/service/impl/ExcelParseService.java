@@ -87,7 +87,7 @@ public class ExcelParseService implements FileParseService {
     row = sheet.getRow(4);
     clientInfo.setCompanyName(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
     clientInfo.setStockCapitalNumber(StringUtils.trimAllWhitespace(row.getCell(7).getStringCellValue()));
-    clientInfoService.createOrFind(clientInfo);
+    clientInfo = clientInfoService.createOrFind(clientInfo);
     return clientInfo;
   }
 

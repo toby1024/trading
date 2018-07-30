@@ -14,6 +14,8 @@ server:
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 
+page-size: 10
+
 ---
 # 开发环境配置
 spring:
@@ -22,3 +24,15 @@ spring:
     url: jdbc:mysql://localhost:3306/trading?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
     username: root
     password: 123456
+
+---
+# 测试环境
+spring:
+  profiles: test
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/sars?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
+#    username: root
+#    password: 123456
+  datasource:
+    schema: classpath:init_table.sql
+    driverClassName: org.h2.Driver

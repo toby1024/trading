@@ -19,6 +19,7 @@ public class ClientInfoServiceImpl implements ClientInfoService {
     ClientInfo info = clientInfoDao.findByFuturesCapitalNumber(clientInfo.getFuturesCapitalNumber());
     if(info == null){
       clientInfoDao.save(clientInfo);
+      return clientInfo;
     }
     return info;
   }
