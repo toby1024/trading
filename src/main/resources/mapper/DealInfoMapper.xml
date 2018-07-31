@@ -19,6 +19,10 @@
     <result column="client_info_id" property="clientInfoId"/>
   </resultMap>
 
+  <resultMap id="detailMapper" type="work.variety.trading.dto.DealInfoDetailDto" extends="dealInfo">
+    <result column="name" property="name"/>
+  </resultMap>
+
   <resultMap id="dealInfoStat" type="work.variety.trading.dto.DealInfoDto">
     <result column="deal_date" property="dealDate"/>
     <result column="name" property="name"/>
@@ -28,6 +32,10 @@
     <result column="client_info_id" property="clientInfoId"/>
     <result column="deal_type" property="dealType"/>
     <result column="deal_fee" property="dealFee"/>
+  </resultMap>
+
+  <resultMap id="dealInfoContractStat" type="work.variety.trading.dto.DealInfoContractDto" extends="dealInfoStat">
+    <result column="contract" property="contract"/>
   </resultMap>
 
   <select id="list" resultMap="dealInfo">
@@ -54,7 +62,38 @@
       </where>
       GROUP BY client_info_id, DATE(deal_date), deal_type
   </sql>
-  <select id="search" resultMap="dealInfoStat">
+
+  <sql id="collectByContract">
+    SELECT a.client_info_id, a.contract, DATE(a.deal_date) AS deal_date, b.name, a.deal_type, sum(deal_fee) AS deal_fee,
+    sum(close_profit) AS close_profit, sum(board_lot) AS board_lot, sum(commission) AS commission
+    FROM deal_info a LEFT JOIN client_info b ON a.client_info_id = b.id
+    <where>
+      <if test="name!=null and name != ''">
+        and b.name like concat('%', #{name}, '%')
+      </if>
+      <if test="dealDate != null">
+        and date(a.deal_date) = #{dealDate}
+      </if>
+      <if test="startDate != null">
+        and a.deal_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and a.deal_date &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+      <if test="dealType != null and dealType !=''">
+        and a.deal_type = #{dealType}
+      </if>
+      <if test="contract != null and contract !=''">
+        and a.contract like concat('%', #{contract}, '%')
+      </if>
+      <if test="clientInfoId != null">
+        and b.id = #{clientInfoId}
+      </if>
+    </where>
+    GROUP BY client_info_id, DATE(deal_date), deal_type, a.contract
+  </sql>
+
+  <select id="collect" resultMap="dealInfoStat">
     SELECT * FROM (
      <include refid="searchSql"/>
     ) c
@@ -63,9 +102,67 @@
     </if>
     LIMIT #{startPage}, #{pageSize}
   </select>
-  <select id="count" resultType="java.lang.Integer">
+
+  <select id="collectCount" resultType="java.lang.Integer">
     SELECT count(*) from (
       <include refid="searchSql"/>
     ) c
+  </select>
+
+  <select id="collectByContract" resultMap="dealInfoContractStat">
+    SELECT * FROM (
+      <include refid="collectByContract"/>
+    ) c
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    LIMIT #{startPage}, #{pageSize}
+  </select>
+
+  <select id="countByContract" resultType="java.lang.Integer">
+    SELECT count(*) from (
+    <include refid="collectByContract"/>
+    ) c
+  </select>
+
+  <sql id="detailSql">
+    FROM deal_info a LEFT JOIN client_info b ON a.client_info_id = b.id
+    <where>
+      <if test="name!=null and name != ''">
+        and b.name like concat('%', #{name}, '%')
+      </if>
+      <if test="dealDate != null">
+        and date(a.deal_date) = #{dealDate}
+      </if>
+      <if test="startDate != null">
+        and a.deal_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and a.deal_date &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+      <if test="dealType != null and dealType !=''">
+        and a.deal_type = #{dealType}
+      </if>
+      <if test="contract != null and contract !=''">
+        and a.contract like concat('%', #{contract}, '%')
+      </if>
+      <if test="clientInfoId != null">
+        and b.id = #{clientInfoId}
+      </if>
+    </where>
+  </sql>
+
+  <select id="count" resultType="java.lang.Integer">
+    SELECT count(*)
+    <include refid="detailSql"/>
+  </select>
+
+  <select id="detail" resultMap="detailMapper">
+    SELECT a.*,b.name
+    <include refid="detailSql"/>
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    LIMIT #{startPage}, #{pageSize}
   </select>
 </mapper>

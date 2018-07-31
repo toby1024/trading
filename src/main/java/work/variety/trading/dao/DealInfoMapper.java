@@ -2,10 +2,11 @@ package work.variety.trading.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import work.variety.trading.dto.DealInfoContractDto;
+import work.variety.trading.dto.DealInfoDetailDto;
 import work.variety.trading.dto.DealInfoDto;
-import work.variety.trading.dto.PageDto;
+import work.variety.trading.dto.SearchDealInfoContractDto;
 import work.variety.trading.dto.SearchDealInfoDto;
 import work.variety.trading.entity.DealInfo;
 
@@ -24,7 +25,16 @@ public interface DealInfoMapper {
 
   List<DealInfo> list();
 
-  List<DealInfoDto> search(SearchDealInfoDto searchDealInfoDto);
+  List<DealInfoDto> collect(SearchDealInfoDto searchDealInfoDto);
+
+  int collectCount(SearchDealInfoDto searchDealInfoDto);
+
+  List<DealInfoContractDto> collectByContract(SearchDealInfoContractDto searchDealInfoContractDto);
+
+  int countByContract(SearchDealInfoContractDto searchDealInfoContractDto);
 
   int count(SearchDealInfoDto searchDealInfoDto);
+
+  List<DealInfoDetailDto> detail(SearchDealInfoDto searchDealInfoDto);
+
 }
