@@ -13,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import work.variety.trading.dao.ClientInfoMapper;
-import work.variety.trading.dao.DealInfoMapper;
 import work.variety.trading.dao.PositionInfoMapper;
 import work.variety.trading.entity.ClientInfo;
-import work.variety.trading.entity.DealInfo;
 import work.variety.trading.entity.PositionInfo;
 import work.variety.trading.exception.DataParseException;
 import work.variety.trading.service.ClientInfoService;
@@ -25,7 +22,6 @@ import work.variety.trading.service.FileParseService;
 import work.variety.trading.service.StorageProperties;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -34,17 +30,16 @@ import java.text.ParseException;
  * @author zhangbin
  * @date 2018/7/25 13:32
  */
-@Service
-public class ExcelParseService implements FileParseService {
-  private Logger logger = LoggerFactory.getLogger(ExcelParseService.class);
+@Service("dayExcelParseService")
+public class DayExcelParseService implements FileParseService {
+  private Logger logger = LoggerFactory.getLogger(DayExcelParseService.class);
 
   private static final String DATE_PARSE_STR = "YYYY-MM-dd";
-  private static final String DATETIME_PARSE_STR = "YYYY-MM-dd HH:mm:ss";
 
   private final Path rootLocation;
 
   @Autowired
-  public ExcelParseService(StorageProperties properties) {
+  public DayExcelParseService(StorageProperties properties) {
     this.rootLocation = Paths.get(properties.getLocation());
   }
 
@@ -56,7 +51,7 @@ public class ExcelParseService implements FileParseService {
       HSSFWorkbook wb = new HSSFWorkbook(fs.getRoot(), true);
       HSSFSheet sheet = wb.getSheet("持仓明细");
       // 基本信息
-      ClientInfo clientInfo = saveClientInfo(sheet);
+      ClientInfo clientInfo = clientInfoService.saveClientInfo(sheet);
       Row row;
       int endRow = sheet.getLastRowNum();
       // 持仓明细
@@ -64,31 +59,11 @@ public class ExcelParseService implements FileParseService {
         row = sheet.getRow(rowNumber);
         savePositionInfo(row, clientInfo);
       }
-      // 交易明细
-      sheet = wb.getSheet("成交明细");
-      endRow = sheet.getLastRowNum();
-      // 持仓明细
-      for (int rowNumber = 10; rowNumber < endRow; rowNumber++) {
-        row = sheet.getRow(rowNumber);
-        saveDealInfo(row, clientInfo);
-      }
+
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new DataParseException("解析excel出错");
     }
-  }
-
-  private ClientInfo saveClientInfo(Sheet sheet) {
-    Row row = sheet.getRow(2);
-    ClientInfo clientInfo = new ClientInfo();
-    clientInfo.setFuturesCapitalNumber(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
-    row = sheet.getRow(3);
-    clientInfo.setName(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
-    row = sheet.getRow(4);
-    clientInfo.setCompanyName(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
-    clientInfo.setStockCapitalNumber(StringUtils.trimAllWhitespace(row.getCell(7).getStringCellValue()));
-    clientInfo = clientInfoService.createOrFind(clientInfo);
-    return clientInfo;
   }
 
   private void savePositionInfo(Row row, ClientInfo clientInfo) throws ParseException {
@@ -141,39 +116,10 @@ public class ExcelParseService implements FileParseService {
     positionInfoDao.save(positionInfo);
   }
 
-  private void saveDealInfo(Row row, ClientInfo clientInfo) throws ParseException {
-    DealInfo dealInfo = new DealInfo();
-    String date = row.getCell(0).getStringCellValue();
-    String time = row.getCell(3).getStringCellValue();
-    dealInfo.setDealDate(DateUtils.parseDate(date + " " + time, DATETIME_PARSE_STR));
-    dealInfo.setContract(StringUtils.trimAllWhitespace(row.getCell(1).getStringCellValue()));
-    dealInfo.setDealNumber(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
-    dealInfo.setDealType(StringUtils.trimAllWhitespace(row.getCell(4).getStringCellValue()));
-    dealInfo.setSpeculateHedging(StringUtils.trimAllWhitespace(row.getCell(5).getStringCellValue()));
-    dealInfo.setDealPrice(row.getCell(6).getNumericCellValue());
-    dealInfo.setBoardLot((int) row.getCell(7).getNumericCellValue());
-    dealInfo.setDealFee(row.getCell(8).getNumericCellValue());
-    dealInfo.setOpenClose(StringUtils.trimAllWhitespace(row.getCell(9).getStringCellValue()));
-    dealInfo.setCommission(row.getCell(10).getNumericCellValue());
-
-    Cell cell = row.getCell(11);
-    switch (cell.getCellTypeEnum()) {
-      case NUMERIC:
-        dealInfo.setCloseProfit(row.getCell(11).getNumericCellValue());
-        break;
-      default:
-        //do nothing
-    }
-
-    dealInfo.setRealDealDate(DateUtils.parseDate(row.getCell(12).getStringCellValue(),DATE_PARSE_STR));
-    dealInfo.setClientInfoId(clientInfo.getId());
-    dealInfoDao.save(dealInfo);
-  }
 
   @Autowired
   private ClientInfoService clientInfoService;
   @Autowired
   private PositionInfoMapper positionInfoDao;
-  @Autowired
-  private DealInfoMapper dealInfoDao;
+
 }

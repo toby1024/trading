@@ -2,6 +2,7 @@ package work.variety.trading.service;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -78,5 +79,40 @@ public class TestCatchData {
     }
 
 
+  }
+
+  @Test
+  public void getData() throws Exception{
+    String url = "https://investorservice.cfmmc.com/customer/setupViewCustomerDetailFromCompanyAuto.do";
+    BasicCookieStore cookieStore = new BasicCookieStore();
+    //JSESSIONID=NHTW3Y5BJEgVo8OoOjjcOtE_1Dnc3VvR_InvmmrRwqkhVEUsAK3n!-1693482384; WMONID=sQj1kIY3rBV
+
+    BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", "HtruKNkXema-HA0Q4CKIud5_M3aDe36oEJW3In-gOXNyY_hF20SI!2025068771");
+    cookie.setDomain("investorservice.cfmmc.com");
+    cookie.setPath("/");
+    cookieStore.addCookie(cookie);
+
+    HttpContext localContext = new BasicHttpContext();
+    localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
+
+    SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (certificate, authType) -> true).build();
+
+    CloseableHttpClient httpclient = HttpClients.custom()
+      .setSSLContext(sslContext)
+      .setSSLHostnameVerifier(new NoopHostnameVerifier())
+      .build();
+
+    HttpGet get = new HttpGet(url);
+    CloseableHttpResponse response = httpclient.execute(get,localContext);
+    assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
+    try {
+      HttpEntity entity = response.getEntity();
+      String responseBody = EntityUtils.toString(response.getEntity());
+      System.out.println(responseBody);
+
+
+    } finally {
+      response.close();
+    }
   }
 }

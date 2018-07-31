@@ -4,22 +4,17 @@ package work.variety.trading.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import work.variety.trading.exception.ErrorFileException;
 import work.variety.trading.exception.StorageFileNotFoundException;
 import work.variety.trading.service.FileParseService;
 import work.variety.trading.service.StorageService;
-
-import java.io.IOException;
-import java.util.stream.Collectors;
 
 /**
  * @author zhangbin
@@ -31,32 +26,54 @@ public class FileUploadController {
   @Autowired
   private StorageService storageService;
   @Autowired
-  private FileParseService fileParseService;
+  private FileParseService monthExcelParseService;
+  @Autowired
+  private FileParseService dayExcelParseService;
 
-  @GetMapping("")
-  public String listUploadedFiles(Model model) throws IOException {
-
-    return "uploadForm";
+  @GetMapping("uploadMonth")
+  public String uploadMonth() {
+    return "uploadMonth";
   }
 
-  @PostMapping("")
-  public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                 RedirectAttributes redirectAttributes) {
+  @PostMapping("month")
+  public String monthData(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
     try {
-      String filename = storageService.store(file);
-
-      fileParseService.parse(filename);
+      String filename = storeFile(file);
+      monthExcelParseService.parse(filename);
       redirectAttributes.addFlashAttribute("message",
         "成功上传并解析文件： " + file.getOriginalFilename() + "!");
     } catch (ErrorFileException e) {
       redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
-    return "redirect:/upload";
+    return "redirect:/upload/uploadMonth";
+  }
+
+  @GetMapping("uploadDay")
+  public String uploadDay() {
+    return "uploadDay";
+  }
+
+  @PostMapping("day")
+  public String dayData(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    try {
+      String filename = storeFile(file);
+      dayExcelParseService.parse(filename);
+      redirectAttributes.addFlashAttribute("message",
+        "成功上传并解析文件： " + file.getOriginalFilename() + "!");
+    } catch (ErrorFileException e) {
+      redirectAttributes.addFlashAttribute("message", e.getMessage());
+    }
+    return "redirect:/upload/uploadDay";
   }
 
   @ExceptionHandler(StorageFileNotFoundException.class)
   public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
     return ResponseEntity.notFound().build();
   }
+
+  private String storeFile(MultipartFile file) {
+    return storageService.store(file);
+  }
+
 }

@@ -1,5 +1,6 @@
 package work.variety.trading.service;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import work.variety.trading.entity.ClientInfo;
 
 /**
@@ -9,4 +10,6 @@ import work.variety.trading.entity.ClientInfo;
 public interface ClientInfoService {
 
   ClientInfo createOrFind(ClientInfo clientInfo);
+
+  ClientInfo saveClientInfo(Sheet sheet);
 }

@@ -1,7 +1,10 @@
 package work.variety.trading.service.impl;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import work.variety.trading.dao.ClientInfoMapper;
 import work.variety.trading.entity.ClientInfo;
 import work.variety.trading.service.ClientInfoService;
@@ -22,6 +25,20 @@ public class ClientInfoServiceImpl implements ClientInfoService {
       return clientInfo;
     }
     return info;
+  }
+
+  @Override
+  public ClientInfo saveClientInfo(Sheet sheet) {
+    Row row = sheet.getRow(2);
+    ClientInfo clientInfo = new ClientInfo();
+    clientInfo.setFuturesCapitalNumber(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
+    row = sheet.getRow(3);
+    clientInfo.setName(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
+    row = sheet.getRow(4);
+    clientInfo.setCompanyName(StringUtils.trimAllWhitespace(row.getCell(2).getStringCellValue()));
+    clientInfo.setStockCapitalNumber(StringUtils.trimAllWhitespace(row.getCell(7).getStringCellValue()));
+    clientInfo = createOrFind(clientInfo);
+    return clientInfo;
   }
 
   @Autowired
