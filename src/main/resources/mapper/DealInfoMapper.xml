@@ -42,6 +42,18 @@
     SELECT * FROM deal_info order by deal_date desc
   </select>
 
+  <select id="findOne" parameterType="work.variety.trading.entity.DealInfo" resultMap="dealInfo">
+    SELECT * FROM deal_info
+    WHERE client_info_id = #{clientInfoId}
+      AND deal_date = #{dealDate}
+      AND deal_type = #{dealType}
+      AND contract = #{contract}
+      AND open_close = #{openClose}
+      AND board_lot = #{boardLot}
+      AND close_profit = #{closeProfit}
+    limit 1
+  </select>
+
   <sql id="searchSql">
       SELECT a.client_info_id, DATE(a.deal_date) AS deal_date, b.name, a.deal_type, sum(deal_fee) AS deal_fee,
             sum(close_profit) AS close_profit, sum(board_lot) AS board_lot, sum(commission) AS commission

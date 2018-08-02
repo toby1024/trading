@@ -12,6 +12,10 @@ import java.util.Date;
 public class PositionInfo {
   private int id;
   /**
+   * 持仓日期
+   */
+  private Date positionDay;
+  /**
    * 合约
    */
   private  String contract;
@@ -59,6 +63,10 @@ public class PositionInfo {
    * 实际成交日期
    */
   private Date realDealDate;
+  /**
+   * 交易保证金
+   */
+  private Double dealMargin;
   /**
    * 关联的客户id
    */

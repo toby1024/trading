@@ -37,4 +37,5 @@ public interface DealInfoMapper {
 
   List<DealInfoDetailDto> detail(SearchDealInfoDto searchDealInfoDto);
 
+  DealInfo findOne(DealInfo dealInfo);
 }

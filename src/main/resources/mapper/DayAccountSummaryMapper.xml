@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="work.variety.trading.dao.DayAccountSummaryMapper">
+
+  <insert id="save" parameterType="work.variety.trading.entity.DayAccountSummary">
+    INSERT INTO day_account_summary(clientInfoId,balanceBF,initialMargin,depositWithdrawal,balanceCF,realizedPL,pledgeAmount,mtmpl,
+    clientEquity,exercisePL,fXPledgeOcc,commission,marginOccupied,exerciseFee,deliveryMargin,deliveryFee,marketValueLong,newFXPledge,
+    marketValueShort,fxRedemption,marketValueEquity,chgInPledgeAmt,fundAvail,premiumReceived,riskDegree,premiumPaid,marginCall,
+    chgInFXPledge,accountDay,fhbcdje,drzqlj,hbcdje,khqy,fdyk,kyzj)
+    VALUES (#{clientInfoId},#{balanceBF},#{initialMargin},#{depositWithdrawal},#{balanceCF},#{realizedPL},#{pledgeAmount},#{mtmpl},
+    #{clientEquity},#{exercisePL},#{fXPledgeOcc},#{commission},#{marginOccupied},#{exerciseFee},#{deliveryMargin},#{deliveryFee},#{marketValueLong},#{newFXPledge},
+   #{marketValueShort},#{fxRedemption},#{marketValueEquity},#{chgInPledgeAmt},#{fundAvail},#{premiumReceived},#{riskDegree},#{premiumPaid},#{marginCall},
+    #{chgInFXPledge},#{accountDay},#{fhbcdje},#{drzqlj},#{hbcdje},#{khqy},#{fdyk},#{kyzj})
+  </insert>
+
+  <select id="find" resultType="work.variety.trading.entity.DayAccountSummary">
+    SELECT * FROM day_account_summary WHERE clientInfoId = #{clientInfoId} AND accountDay=#{accountDay}
+  </select>
+</mapper>

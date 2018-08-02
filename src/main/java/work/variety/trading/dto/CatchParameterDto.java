@@ -7,12 +7,13 @@ import java.util.Date;
 
 /**
  * @author zhangbin
- * @date 2018/7/27 14:09
+ * @date 2018/7/31 16:49
  */
 @Data
-public class SearchDealInfoContractDto extends SearchDealInfoDto {
-
-  private String contract;
+public class CatchParameterDto {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date dealDate;
+  private Date startDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date endDate;
+  private String jSessionId;
 }

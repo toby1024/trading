@@ -18,5 +18,5 @@ public class SearchDealInfoDto extends BaseSearchPageDto {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date endDate;
   private String dealType;
-
+  private int clientInfoId;
 }

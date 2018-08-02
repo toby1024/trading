@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="work.variety.trading.dao.PositionInfoMapper">
+
+  <resultMap id="positionInfoMapper" type="work.variety.trading.entity.PositionInfo">
+    <id column="id" property="id"></id>
+    <result column="position_day" property="positionDay"/>
+    <result column="contract" property="contract"/>
+    <result column="deal_number" property="dealNumber"/>
+    <result column="buy_board_lot" property="buyBoardLot"/>
+    <result column="buy_price" property="buyPrice"/>
+    <result column="sell_board_lot" property="sellBoardLot"/>
+    <result column="sellPrice" property="sellPrice"/>
+    <result column="yesterday_price" property="yesterdayPrice"/>
+    <result column="today_price" property="todayPrice"/>
+    <result column="profit" property="profit"/>
+    <result column="speculate_hedging" property="speculateHedging"/>
+    <result column="transaction_number" property="transactionNumber"/>
+    <result column="real_deal_date" property="realDealDate"/>
+    <result column="deal_margin" property="dealMargin"/>
+    <result column="client_info_id" property="clientInfoId"/>
+  </resultMap>
+
+  <insert id="save" parameterType="work.variety.trading.entity.PositionInfo" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO position_info(position_day,contract,deal_number,buy_board_lot,buy_price,sell_board_lot,sell_price,yesterday_price,
+    today_price,profit,speculate_hedging,transaction_number,client_info_id,deal_margin,real_deal_date)
+    VALUES (#{positionDay},#{contract},#{dealNumber},#{buyBoardLot},#{buyPrice},#{sellBoardLot},#{sellPrice},#{yesterdayPrice},
+    #{todayPrice},#{profit},#{speculateHedging},#{transactionNumber},#{clientInfoId},#{dealMargin},#{realDealDate})
+  </insert>
+
+  <select id="findOne" parameterType="work.variety.trading.entity.PositionInfo" resultMap="positionInfoMapper">
+    SELECT * FROM position_info
+    WHERE position_day = #{positionDay}
+    AND contract = #{contract}
+    AND buy_board_lot = #{buyBoardLot}
+    AND buy_price = #{buyPrice}
+    AND sell_board_lot = #{sellBoardLot}
+    AND sell_price = #{sellPrice}
+    AND client_info_id = #{clientInfoId}
+    limit 1
+  </select>
+
+</mapper>

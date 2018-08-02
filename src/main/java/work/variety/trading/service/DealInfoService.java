@@ -23,4 +23,6 @@ public interface DealInfoService {
   PageDto<DealInfoContractDto> searchByContract(SearchDealInfoContractDto searchDealInfoContractDto);
 
   PageDto<DealInfoDetailDto> detail(SearchDealInfoDto searchDealInfoDto);
+
+  DealInfo findOrCreate(DealInfo dealInfo);
 }

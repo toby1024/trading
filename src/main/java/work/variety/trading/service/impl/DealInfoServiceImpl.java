@@ -48,6 +48,16 @@ public class DealInfoServiceImpl implements DealInfoService {
     return new PageDto<DealInfoDetailDto>(list, searchDealInfoDto.getPageNum(), totalCount, searchDealInfoDto.getPageSize());
   }
 
+  @Override
+  public DealInfo findOrCreate(DealInfo dealInfo) {
+    DealInfo info = dealInfoDao.findOne(dealInfo);
+    if (info != null) {
+      return info;
+    }
+    dealInfoDao.save(dealInfo);
+    return dealInfo;
+  }
+
   @Autowired
   private DealInfoMapper dealInfoDao;
 }

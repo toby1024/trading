@@ -29,6 +29,8 @@ public class FileUploadController {
   private FileParseService monthExcelParseService;
   @Autowired
   private FileParseService dayExcelParseService;
+  @Autowired
+  private FileParseService txtDataParseService;
 
   @GetMapping("uploadMonth")
   public String uploadMonth() {
@@ -66,6 +68,20 @@ public class FileUploadController {
     }
     return "redirect:/upload/uploadDay";
   }
+
+  @GetMapping("uploadTxt")
+  public String uploadTxt() {
+    return "uploadTxt";
+  }
+
+  @PostMapping("txt")
+  public String txt(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    String filename = storageService.storeTXT(file);
+    txtDataParseService.parse(filename);
+    redirectAttributes.addFlashAttribute("message", "成功上传并解析文件： " + file.getOriginalFilename() + "!");
+    return "redirect:/upload/uploadTxt";
+  }
+
 
   @ExceptionHandler(StorageFileNotFoundException.class)
   public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {

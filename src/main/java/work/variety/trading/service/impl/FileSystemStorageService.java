@@ -43,6 +43,21 @@ public class FileSystemStorageService implements StorageService {
     if(!filename.endsWith("xls")){
       throw new ErrorFileException("只支持excel文件上传");
     }
+    saveFile(file, filename);
+    return filename;
+  }
+
+  @Override
+  public String storeTXT(MultipartFile file) {
+    String filename = StringUtils.cleanPath(file.getOriginalFilename());
+    if(!filename.endsWith("txt")){
+      throw new ErrorFileException("只支持txt文件上传");
+    }
+    saveFile(file, filename);
+    return filename;
+  }
+
+  private void saveFile(MultipartFile file,String filename){
     try {
       if (file.isEmpty()) {
         throw new StorageException("Failed to store empty file " + filename);
@@ -57,13 +72,11 @@ public class FileSystemStorageService implements StorageService {
         Files.copy(inputStream, this.rootLocation.resolve(filename),
           StandardCopyOption.REPLACE_EXISTING);
       }
-      return filename;
     }
     catch (IOException e) {
       throw new StorageException("Failed to store file " + filename, e);
     }
   }
-
   @Override
   public Stream<Path> loadAll() {
     try {
