@@ -13,4 +13,9 @@
   <select id="all" resultMap="userMapper">
     select * from user where state = 1
   </select>
+
+  <insert id="create" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO user (username, password, state)
+    VALUES (#{username}, #{password}, #{state})
+  </insert>
 </mapper>
