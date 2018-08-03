@@ -34,7 +34,7 @@ public class FileUploadController {
 
   @GetMapping("uploadMonth")
   public String uploadMonth() {
-    return "uploadMonth";
+    return "upload/uploadMonth";
   }
 
   @PostMapping("month")
@@ -53,7 +53,7 @@ public class FileUploadController {
 
   @GetMapping("uploadDay")
   public String uploadDay() {
-    return "uploadDay";
+    return "upload/uploadDay";
   }
 
   @PostMapping("day")
@@ -71,7 +71,7 @@ public class FileUploadController {
 
   @GetMapping("uploadTxt")
   public String uploadTxt() {
-    return "uploadTxt";
+    return "upload/uploadTxt";
   }
 
   @PostMapping("txt")

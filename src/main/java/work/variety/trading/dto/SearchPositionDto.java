@@ -1,6 +1,9 @@
 package work.variety.trading.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * @author zhangbin
@@ -8,4 +11,12 @@ import lombok.Data;
  */
 @Data
 public class SearchPositionDto extends BaseSearchPageDto{
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date startDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date endDate;
+  private String name;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date positionDay;
+
 }

@@ -3,6 +3,7 @@ package work.variety.trading.dao;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import work.variety.trading.dto.PositionInfoDto;
 import work.variety.trading.dto.PositionStatDto;
 import work.variety.trading.dto.SearchPositionDto;
 import work.variety.trading.entity.PositionInfo;
@@ -19,7 +20,13 @@ public interface PositionInfoMapper {
 
   int save(PositionInfo positionInfo);
 
+  PositionInfo findOne(PositionInfo positionInfo);
+
+  int countStat(SearchPositionDto searchPositionDto);
+
   List<PositionStatDto> stat(SearchPositionDto searchPositionDto);
 
-  PositionInfo findOne(PositionInfo positionInfo);
+  int count(SearchPositionDto searchPositionDto);
+
+  List<PositionInfoDto> search(SearchPositionDto searchPositionDto);
 }

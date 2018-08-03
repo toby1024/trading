@@ -1,6 +1,7 @@
 package work.variety.trading.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 @Data
 public class SearchDayAccountDto {
   private int clientInfoId;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date accountDay;
 
 }

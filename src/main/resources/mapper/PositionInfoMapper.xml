@@ -21,6 +21,19 @@
     <result column="client_info_id" property="clientInfoId"/>
   </resultMap>
 
+  <resultMap id="positionInfoDtoMapper" type="work.variety.trading.dto.PositionInfoDto" extends="positionInfoMapper">
+    <result column="name" property="name"/>
+  </resultMap>
+
+  <resultMap id="positionStat" type="work.variety.trading.dto.PositionStatDto">
+    <result column="position_day" property="positionDay"/>
+    <result column="name" property="name"/>
+    <result column="client_info_id" property="clientInfoId"/>
+    <result column="buy_board_lot" property="buyBoardLot"/>
+    <result column="sell_board_lot" property="sellBoardLot"/>
+    <result column="profit" property="profit"/>
+  </resultMap>
+
   <insert id="save" parameterType="work.variety.trading.entity.PositionInfo" keyProperty="id" useGeneratedKeys="true">
     INSERT INTO position_info(position_day,contract,deal_number,buy_board_lot,buy_price,sell_board_lot,sell_price,yesterday_price,
     today_price,profit,speculate_hedging,transaction_number,client_info_id,deal_margin,real_deal_date)
@@ -38,6 +51,71 @@
     AND sell_price = #{sellPrice}
     AND client_info_id = #{clientInfoId}
     limit 1
+  </select>
+
+  <sql id="statSql">
+    SELECT position_day,a.client_info_id, b.name,sum(a.buy_board_lot) AS buy_board_lot, sum(a.`sell_board_lot`) AS
+    sell_board_lot, sum(a.`profit`) AS profit
+    FROM position_info a LEFT JOIN client_info b ON a.client_info_id = b.id
+    <where>
+      <if test="name!=null and name != ''">
+        and b.name like concat('%', #{name}, '%')
+      </if>
+      <if test="startDate != null">
+        and a.position_day &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and a.position_day &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+    </where>
+    GROUP BY a.`position_day`,a.client_info_id
+  </sql>
+
+  <select id="countStat" resultType="java.lang.Integer" parameterType="work.variety.trading.dto.SearchPositionDto">
+    SELECT count(*) FROM (
+    <include refid="statSql"/>
+    ) c
+  </select>
+  <select id="stat" parameterType="work.variety.trading.dto.SearchPositionDto" resultMap="positionStat">
+    SELECT * FROM (
+    <include refid="statSql"/>
+    ) c
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    LIMIT #{startPage}, #{pageSize}
+  </select>
+
+  <sql id="searchSql">
+    SELECT a.*,b.name FROM position_info a LEFT JOIN client_info b ON a.client_info_id = b.id
+    <where>
+      <if test="name!=null and name != ''">
+        and b.name like concat('%', #{name}, '%')
+      </if>
+      <if test="startDate != null">
+        and a.position_day &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and a.position_day &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+      <if test="positionDay != null">
+        and a.position_day = #{positionDay}
+      </if>
+    </where>
+  </sql>
+
+  <select id="count" resultType="java.lang.Integer" parameterType="work.variety.trading.dto.SearchPositionDto">
+    SELECT count(*) FROM (
+    <include refid="searchSql"/>
+    ) c
+  </select>
+
+  <select id="search" resultMap="positionInfoDtoMapper" parameterType="work.variety.trading.dto.SearchPositionDto">
+    <include refid="searchSql"/>
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    LIMIT #{startPage}, #{pageSize}
   </select>
 
 </mapper>

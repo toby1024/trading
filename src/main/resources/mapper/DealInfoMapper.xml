@@ -102,7 +102,7 @@
         and b.id = #{clientInfoId}
       </if>
     </where>
-    GROUP BY client_info_id, DATE(deal_date), deal_type, a.contract
+    GROUP BY client_info_id, DATE(deal_date) , deal_type, a.contract
   </sql>
 
   <select id="collect" resultMap="dealInfoStat">

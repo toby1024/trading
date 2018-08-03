@@ -26,7 +26,7 @@ public class DealInfoController {
     PageDto<DealInfoDto> page = dealInfoService.search(searchDealInfoDto);
     model.addAttribute("page", page);
     model.addAttribute("searchCondition", searchDealInfoDto);
-    return "dealInfos";
+    return "deal/dealInfos";
   }
 
   @GetMapping("byContract")
@@ -34,7 +34,7 @@ public class DealInfoController {
     PageDto<DealInfoContractDto> page = dealInfoService.searchByContract(searchDealInfoContractDto);
     model.addAttribute("page", page);
     model.addAttribute("searchCondition", searchDealInfoContractDto);
-    return "detailByContract";
+    return "deal/detailByContract";
   }
 
   @GetMapping("detail")
@@ -42,7 +42,7 @@ public class DealInfoController {
     PageDto<DealInfoDetailDto> page = dealInfoService.detail(searchDealInfoDto);
     model.addAttribute("page", page);
     model.addAttribute("searchCondition", searchDealInfoDto);
-    return "detail";
+    return "deal/detail";
   }
 
   @Autowired

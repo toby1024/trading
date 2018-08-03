@@ -15,18 +15,14 @@
 <!-- Begin page content -->
 <div class="container">
     <div class="page-header">
-        <h1>交易明细</h1>
+        <h1>交易汇总</h1>
     </div>
     <div style="border-bottom: 1px solid #eee;margin-bottom: 5px;">
-        <form class="form-inline" action="/deal/detail">
+        <form class="form-inline" action="/deal">
             <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}">
             <div class="form-group">
                 <label for="name">姓名</label>
                 <input type="text" class="form-control" id="name" name="name" th:value="${searchCondition.name}">
-            </div>
-            <div class="form-group">
-                <label for="contract">合约</label>
-                <input type="text" class="form-control" id="contract" name="contract" th:value="${searchCondition.contract}">
             </div>
             <div class="form-group">
                 <label for="startDate">交易日期</label>
@@ -37,10 +33,10 @@
             </div>
             <div class="form-group">
                 <label for="dealType">交易类型</label>
-                <select id="dealType" name="dealType" class="form-control" th:value="${searchCondition.dealType}">
+                <select id="dealType" name="dealType" class="form-control">
                     <option value="">全部</option>
-                    <option value="买">买</option>
-                    <option value="卖">卖</option>
+                    <option value="买" th:selected="(${searchCondition.dealType == '买'})">买</option>
+                    <option value="卖" th:selected="(${searchCondition.dealType == '卖'})">卖</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-default">查询</button>
@@ -50,50 +46,45 @@
         <table class="table table-bordered">
             <tr>
                 <th>姓名</th>
-                <th>合约</th>
                 <th>交易时间</th>
-                <th>成交序号</th>
                 <th>交易类型</th>
-                <th>投机/套保</th>
-                <th>成交价</th>
                 <th>成交手数</th>
                 <th>成交额</th>
-                <th>开/平</th>
                 <th>手续费</th>
                 <th>平仓盈亏</th>
-                <th>实际成交日期</th>
+                <th>明细</th>
             </tr>
             <tr th:each="deal : ${page.list}">
                 <td th:text="${deal.name} "></td>
-                <td th:text="${deal.contract} "></td>
-                <td th:text="${#dates.format(deal.dealDate,'yyyy-MM-dd HH:mm:ss')} "></td>
-                <td th:text="${deal.dealNumber} "></td>
+                <td th:text="${#dates.format(deal.dealDate,'yyyy-MM-dd')} "></td>
                 <td th:text="${deal.dealType} "></td>
-                <td th:text="${deal.speculateHedging} "></td>
-                <td th:text="${deal.dealPrice} "></td>
                 <td th:text="${deal.boardLot} "></td>
                 <td th:text="${deal.dealFee} "></td>
-                <td th:text="${deal.openClose} "></td>
                 <td th:text="${deal.commission} "></td>
                 <td th:text="${deal.closeProfit} "></td>
-                <td th:text="${#dates.format(deal.realDealDate,'yyyy-MM-dd')} "></td>
+                <td><a th:href="'/deal/byContract?dealDate='+${#dates.format(deal.dealDate,'yyyy-MM-dd')}
+                +'&dealType='+${deal.dealType}
+                +'&clientInfoId='+${deal.clientInfoId}"
+                       class="btn btn-info" target="_blank">明细</a></td>
             </tr>
         </table>
 
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li>
-                    <a href="javaScript:void(0);" aria-label="Previous" th:onclick="'javascript:jump('+${page.prePage}+');'">
+                    <a href="javaScript:void(0);" aria-label="Previous"
+                       th:onclick="'javascript:jump('+${page.prePage}+');'">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li th:each="pageNum:${#numbers.sequence(1, page.pages)}"  th:classappend="${pageNum eq page.pageNum} ? active : ''">
+                <li th:each="pageNum:${#numbers.sequence(1, page.pages)}"
+                    th:classappend="${pageNum eq page.pageNum} ? active : ''">
                     <a href="javaScript:void(0);" th:onclick="'javaScript:jump('+${pageNum}+');'"
                        th:text="${pageNum}" th:if="${pageNum < 11}"></a>
-                    <a href="javaScript:void(0);" th:text="..." th:if="${pageNum > 10 and pageNum == 11}"></a>
                 </li>
                 <li>
-                    <a href="javaScript:void(0);" aria-label="Next" th:onclick="'javascript:jump('+${page.nextPage}+');'">
+                    <a href="javaScript:void(0);" aria-label="Next"
+                       th:onclick="'javascript:jump('+${page.nextPage}+');'">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

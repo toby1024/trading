@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{decorator/head::header}">
+
     <script>
         $(function () {
             $("#startDate").datepicker();
@@ -15,56 +16,70 @@
 <!-- Begin page content -->
 <div class="container">
     <div class="page-header">
-        <h1>交易汇总</h1>
+        <h1>持仓汇总</h1>
     </div>
     <div style="border-bottom: 1px solid #eee;margin-bottom: 5px;">
-        <form class="form-inline" action="/deal">
+        <form class="form-inline" action="/position">
             <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}">
             <div class="form-group">
                 <label for="name">姓名</label>
                 <input type="text" class="form-control" id="name" name="name" th:value="${searchCondition.name}">
             </div>
             <div class="form-group">
-                <label for="startDate">交易日期</label>
+                <label for="startDate">日期</label>
                 <input type="text" class="form-control" id="startDate" name="startDate"
                        th:value="${#dates.format(searchCondition.startDate,'yyyy-MM-dd')}"> -
                 <input type="text" class="form-control" id="endDate" name="endDate"
                        th:value="${#dates.format(searchCondition.endDate,'yyyy-MM-dd')}">
             </div>
-            <div class="form-group">
-                <label for="dealType">交易类型</label>
-                <select id="dealType" name="dealType" class="form-control" th:value="${searchCondition.dealType}">
-                    <option value="">全部</option>
-                    <option value="买">买</option>
-                    <option value="卖">卖</option>
-                </select>
-            </div>
             <button type="submit" class="btn btn-default">查询</button>
         </form>
     </div>
+    <div id="lineChart" style="width: 100%;height:400px;border-bottom: 1px solid #eee;margin-bottom: 5px;">
+
+    </div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('lineChart'));
+
+        var xAxisData = [];
+
+        // 指定图表的配置项和数据
+        option = {
+            xAxis: {
+                type: 'category',
+                data: [[${days}]]
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [[${datas}]],
+                type: 'line',
+                smooth: true
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
     <div>
         <table class="table table-bordered">
             <tr>
                 <th>姓名</th>
-                <th>交易时间</th>
-                <th>交易类型</th>
-                <th>成交手数</th>
-                <th>成交额</th>
-                <th>手续费</th>
-                <th>平仓盈亏</th>
+                <th>日期</th>
+                <th>买持仓</th>
+                <th>卖持仓</th>
+                <th>浮动盈亏</th>
                 <th>明细</th>
             </tr>
-            <tr th:each="deal : ${page.list}">
-                <td th:text="${deal.name} "></td>
-                <td th:text="${#dates.format(deal.dealDate,'yyyy-MM-dd')} "></td>
-                <td th:text="${deal.dealType} "></td>
-                <td th:text="${deal.boardLot} "></td>
-                <td th:text="${deal.dealFee} "></td>
-                <td th:text="${deal.commission} "></td>
-                <td th:text="${deal.closeProfit} "></td>
-                <td><a th:href="'/deal/byContract?dealDate='+${#dates.format(deal.dealDate,'yyyy-MM-dd')}
-                +'&dealType='+${deal.dealType}
-                +'&clientInfoId='+${deal.clientInfoId}"
+            <tr th:each="position : ${page.list}">
+                <td th:text="${position.name} "></td>
+                <td th:text="${#dates.format(position.positionDay,'yyyy-MM-dd')} "></td>
+                <td th:text="${position.buyBoardLot} "></td>
+                <td th:text="${position.sellBoardLot} "></td>
+                <td th:text="${position.profit} "></td>
+                <td><a th:href="'/position/detail?positionDay='+${#dates.format(position.positionDay,'yyyy-MM-dd')}+'&clientInfoId='+${position.clientInfoId}"
                        class="btn btn-info" target="_blank">明细</a></td>
             </tr>
         </table>
