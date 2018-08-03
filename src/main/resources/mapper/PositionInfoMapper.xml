@@ -61,6 +61,9 @@
       <if test="name!=null and name != ''">
         and b.name like concat('%', #{name}, '%')
       </if>
+      <if test="clientInfoId != null">
+        and a.client_info_id = #{clientInfoId}
+      </if>
       <if test="startDate != null">
         and a.position_day &gt;= #{startDate}
       </if>
@@ -68,7 +71,7 @@
         and a.position_day &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
       </if>
     </where>
-    GROUP BY a.`position_day`,a.client_info_id
+    GROUP BY a.`position_day`, a.client_info_id
   </sql>
 
   <select id="countStat" resultType="java.lang.Integer" parameterType="work.variety.trading.dto.SearchPositionDto">
@@ -76,6 +79,7 @@
     <include refid="statSql"/>
     ) c
   </select>
+
   <select id="stat" parameterType="work.variety.trading.dto.SearchPositionDto" resultMap="positionStat">
     SELECT * FROM (
     <include refid="statSql"/>
@@ -83,7 +87,9 @@
     <if test="orderBy != null">
       ORDER BY ${orderBy} ${orderDesc}
     </if>
-    LIMIT #{startPage}, #{pageSize}
+    <if test="isPage">
+      LIMIT #{startPage}, #{pageSize}
+    </if>
   </select>
 
   <sql id="searchSql">

@@ -19,4 +19,6 @@ public class SearchPositionDto extends BaseSearchPageDto{
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date positionDay;
 
+  private Integer clientInfoId;
+  private boolean isPage = true;
 }

@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import work.variety.trading.entity.ClientInfo;
 
+import java.util.List;
+
 /**
  * @author zhangbin
  * @date 2018/7/25 15:53
@@ -23,4 +25,6 @@ public interface ClientInfoMapper {
 
   @Select("SELECT * FROM client_info WHERE futures_capital_number = #{futuresCapitalNumber}")
   ClientInfo findByFuturesCapitalNumber(@Param("futuresCapitalNumber") String futuresCapitalNumber);
+
+  List<ClientInfo> findByName(@Param("name") String name);
 }
