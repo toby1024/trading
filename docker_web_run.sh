@@ -20,5 +20,5 @@ if [ "$RUN_CONTEXT" = "pre_prod" ]; then
 #生产环境
 elif [ "$RUN_CONTEXT" = "prod" ]; then
     echo "root:POloXM1980!@&" | chpasswd
-    java -jar /app/crms_api/app.jar --spring.profiles.active=prod
+    java -jar /app/trading/app.jar --spring.profiles.active=prod
 fi
