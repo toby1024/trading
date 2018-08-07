@@ -1,5 +1,6 @@
 package work.variety.trading.web;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,8 @@ import work.variety.trading.dto.SearchDealInfoContractDto;
 import work.variety.trading.dto.SearchDealInfoDto;
 import work.variety.trading.service.DealInfoService;
 
+import java.util.Date;
+
 /**
  * @author zhangbin
  * @date 2018/7/26 17:02
@@ -23,6 +26,9 @@ public class DealInfoController {
 
   @GetMapping("")
   public String index(Model model, SearchDealInfoDto searchDealInfoDto) {
+    if (searchDealInfoDto.getStartDate() == null) {
+      searchDealInfoDto.setStartDate(DateUtils.addDays(new Date(), -30));
+    }
     PageDto<DealInfoDto> page = dealInfoService.search(searchDealInfoDto);
     model.addAttribute("page", page);
     model.addAttribute("searchCondition", searchDealInfoDto);
