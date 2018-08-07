@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10240KB
+      max-request-size: 10240KB
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+
+server:
+  port: 8080
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+page-size: 10
+
+---
+# 开发环境配置
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/trading?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
+    username: root
+    password: 123456
+
+---
+# 生产环境配置
+spring:
+  profiles: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
