@@ -36,3 +36,12 @@ spring:
   datasource:
     schema: classpath:init_table.sql
     driverClassName: org.h2.Driver
+
+---
+# 生产环境配置
+spring:
+  profiles: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}

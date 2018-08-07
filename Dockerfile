@@ -11,7 +11,6 @@ ADD src /tmp/build/src
 RUN mkdir -p $APP_HOME && \
     mkdir -p $APP_HOME/bin && \
     cd /tmp/build && \
-    mv src/main/resources/application.yml.ci src/main/resources/application.yml && \
     # maven package
     mvn clean package -DskipTests=true -q &&\
     #拷贝编译jar到指定目录
