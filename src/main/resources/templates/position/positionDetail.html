@@ -1,14 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{decorator/head::header}">
     <script src="/js/echarts.simple.min.js"></script>
-    <script>
-        $(function () {
-            $("#startDate").datepicker();
-            $("#endDate").datepicker();
-        });
-    </script>
+
 </head>
 <body>
+<script>
+    $(function () {
+        $("#startDate").datepicker();
+        $("#endDate").datepicker();
+    });
+</script>
 <nav class="navbar navbar-default navbar-fixed-top" th:replace="~{decorator/menu::menu}">
 
 </nav>

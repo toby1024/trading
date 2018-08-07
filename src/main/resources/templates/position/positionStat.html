@@ -9,6 +9,12 @@
     </script>
 </head>
 <body>
+<script>
+    $(function () {
+        $("#startDate").datepicker();
+        $("#endDate").datepicker();
+    });
+</script>
 <nav class="navbar navbar-default navbar-fixed-top" th:replace="~{decorator/menu::menu}">
 
 </nav>
