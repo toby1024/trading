@@ -100,181 +100,189 @@ public class CatchDataServiceImpl implements CatchDataService {
   }
 
   private void saveDayAccountSummary(Elements elements, ClientInfo clientInfo, Date date) {
-    Elements accountElements = elements.get(3).children().get(0).children();
-    DayAccountSummary accountSummary = new DayAccountSummary();
-    accountSummary.setAccountDay(date);
-    accountSummary.setClientInfoId(clientInfo.getId());
+    try {
+      Elements accountElements = elements.get(3).children().get(0).children();
+      DayAccountSummary accountSummary = new DayAccountSummary();
+      accountSummary.setAccountDay(date);
+      accountSummary.setClientInfoId(clientInfo.getId());
 
-    String element = accountElements.get(1).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setBalanceBF(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      String element = accountElements.get(1).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setBalanceBF(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(1).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setClientEquity(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(2).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setDepositWithdrawal(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(2).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setKhqy(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(3).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setRealizedPL(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(3).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setFhbcdje(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(4).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setFhbcdje(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(4).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setDrzqlj(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(4).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setHbcdje(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(5).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setCommission(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(5).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setPledgeAmount(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(6).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setBalanceCF(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(6).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setMarginOccupied(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(7).children().get(1).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setFdyk(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(7).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setKyzj(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(8).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setRiskDegree(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll("%", "").replaceAll(",", ""))));
+      }
+
+      element = accountElements.get(9).children().get(3).text();
+      if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
+        accountSummary.setMarginCall(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      }
+
+      accountService.findOrCreate(accountSummary);
+    }catch (Exception e){
+
     }
-
-    element = accountElements.get(1).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setClientEquity(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(2).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setDepositWithdrawal(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(2).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setKhqy(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(3).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setRealizedPL(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(3).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setFhbcdje(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(4).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setFhbcdje(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(4).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setDrzqlj(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(4).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setHbcdje(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(5).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setCommission(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(5).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setPledgeAmount(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(6).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setBalanceCF(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(6).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setMarginOccupied(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(7).children().get(1).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setFdyk(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(7).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setKyzj(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(8).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setRiskDegree(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll("%", "").replaceAll(",", ""))));
-    }
-
-    element = accountElements.get(9).children().get(3).text();
-    if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setMarginCall(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
-    }
-
-    accountService.findOrCreate(accountSummary);
   }
 
   private void saveDealInfo(Elements elements, ClientInfo clientInfo, Date date) {
-    Elements dealElements = elements.get(7).children().get(0).children();
-    int size = dealElements.size();
-    for (int i = 2; i < size - 1; i++) {
-      DealInfo dealInfo = new DealInfo();
-      Elements datas = dealElements.get(i).children();
+    try {
+      Elements dealElements = elements.get(7).children().get(0).children();
+      int size = dealElements.size();
+      for (int i = 2; i < size - 1; i++) {
+        DealInfo dealInfo = new DealInfo();
+        Elements datas = dealElements.get(i).children();
 
-      dealInfo.setDealDate(date);
-      dealInfo.setClientInfoId(clientInfo.getId());
+        dealInfo.setDealDate(date);
+        dealInfo.setClientInfoId(clientInfo.getId());
 
-      dealInfo.setContract(datas.get(0).text());
-      dealInfo.setDealType(datas.get(1).text());
-      dealInfo.setSpeculateHedging(datas.get(2).text());
+        dealInfo.setContract(datas.get(0).text());
+        dealInfo.setDealType(datas.get(1).text());
+        dealInfo.setSpeculateHedging(datas.get(2).text());
 
-      if (!StringUtils.isEmpty(datas.get(3).text()) && !"--".equals(datas.get(3).text())) {
-        dealInfo.setDealPrice(Double.parseDouble(datas.get(3).text().replaceAll(",", "")));
+        if (!StringUtils.isEmpty(datas.get(3).text()) && !"--".equals(datas.get(3).text())) {
+          dealInfo.setDealPrice(Double.parseDouble(datas.get(3).text().replaceAll(",", "")));
+        }
+
+        if (!StringUtils.isEmpty(datas.get(4).text()) && !"--".equals(datas.get(4).text())) {
+          dealInfo.setBoardLot(Integer.parseInt(datas.get(4).text()));
+        }
+
+        if (!StringUtils.isEmpty(datas.get(5).text()) && !"--".equals(datas.get(5).text())) {
+          dealInfo.setDealFee(Double.parseDouble(datas.get(5).text().replaceAll(",", "")));
+        }
+        dealInfo.setOpenClose(datas.get(6).text());
+
+        if (!StringUtils.isEmpty(datas.get(7).text()) && !"--".equals(datas.get(7).text())) {
+          dealInfo.setCommission(Double.parseDouble(datas.get(7).text()));
+        }
+
+        if (!StringUtils.isEmpty(datas.get(8).text()) && !"--".equals(datas.get(8).text())) {
+          dealInfo.setCloseProfit(Double.parseDouble(datas.get(8).text().replaceAll(",", "")));
+        }
+        dealInfoService.findOrCreate(dealInfo);
       }
-
-      if (!StringUtils.isEmpty(datas.get(4).text()) && !"--".equals(datas.get(4).text())) {
-        dealInfo.setBoardLot(Integer.parseInt(datas.get(4).text()));
-      }
-
-      if (!StringUtils.isEmpty(datas.get(5).text()) && !"--".equals(datas.get(5).text())) {
-        dealInfo.setDealFee(Double.parseDouble(datas.get(5).text().replaceAll(",", "")));
-      }
-      dealInfo.setOpenClose(datas.get(6).text());
-
-      if (!StringUtils.isEmpty(datas.get(7).text()) && !"--".equals(datas.get(7).text())) {
-        dealInfo.setCommission(Double.parseDouble(datas.get(7).text()));
-      }
-
-      if (!StringUtils.isEmpty(datas.get(8).text()) && !"--".equals(datas.get(8).text())) {
-        dealInfo.setCloseProfit(Double.parseDouble(datas.get(8).text().replaceAll(",", "")));
-      }
-      dealInfoService.findOrCreate(dealInfo);
-    }
+    }catch (Exception e){}
   }
 
   private void savePositionInfo(Elements elements, ClientInfo clientInfo, Date date) {
-    Elements positionElements = elements.get(9).children().get(0).children();
-    int size = positionElements.size();
-    for (int i = 2; i < size - 1; i++) {
-      PositionInfo positionInfo = new PositionInfo();
+    try {
+      Elements positionElements = elements.get(9).children().get(0).children();
+      int size = positionElements.size();
+      for (int i = 2; i < size - 1; i++) {
+        PositionInfo positionInfo = new PositionInfo();
 
-      Elements datas = positionElements.get(i).children();
-      positionInfo.setPositionDay(date);
-      positionInfo.setClientInfoId(clientInfo.getId());
+        Elements datas = positionElements.get(i).children();
+        positionInfo.setPositionDay(date);
+        positionInfo.setClientInfoId(clientInfo.getId());
 
-      positionInfo.setContract(datas.get(0).text());
-      if (!StringUtils.isEmpty(datas.get(1).text()) && !"--".equals(datas.get(1).text())) {
-        positionInfo.setBuyBoardLot(Integer.parseInt(datas.get(1).text()));
-      }
+        positionInfo.setContract(datas.get(0).text());
+        if (!StringUtils.isEmpty(datas.get(1).text()) && !"--".equals(datas.get(1).text())) {
+          positionInfo.setBuyBoardLot(Integer.parseInt(datas.get(1).text()));
+        }
 
-      if (!StringUtils.isEmpty(datas.get(2).text()) && !"--".equals(datas.get(2).text())) {
-        positionInfo.setBuyPrice(Double.parseDouble(datas.get(2).text().replaceAll(",", "")));
-      }
+        if (!StringUtils.isEmpty(datas.get(2).text()) && !"--".equals(datas.get(2).text())) {
+          positionInfo.setBuyPrice(Double.parseDouble(datas.get(2).text().replaceAll(",", "")));
+        }
 
-      if (!StringUtils.isEmpty(datas.get(3).text())) {
-        positionInfo.setSellBoardLot(Integer.parseInt(datas.get(3).text()));
-      }
-      if (!StringUtils.isEmpty(datas.get(4).text())) {
-        positionInfo.setSellPrice(Double.parseDouble(datas.get(4).text().replaceAll(",", "")));
-      }
+        if (!StringUtils.isEmpty(datas.get(3).text())) {
+          positionInfo.setSellBoardLot(Integer.parseInt(datas.get(3).text()));
+        }
+        if (!StringUtils.isEmpty(datas.get(4).text())) {
+          positionInfo.setSellPrice(Double.parseDouble(datas.get(4).text().replaceAll(",", "")));
+        }
 
-      if (!StringUtils.isEmpty(datas.get(5).text()) && !"--".equals(datas.get(5).text())) {
-        positionInfo.setYesterdayPrice(Double.parseDouble(datas.get(5).text().replaceAll(",", "")));
-      }
+        if (!StringUtils.isEmpty(datas.get(5).text()) && !"--".equals(datas.get(5).text())) {
+          positionInfo.setYesterdayPrice(Double.parseDouble(datas.get(5).text().replaceAll(",", "")));
+        }
 
-      if (!StringUtils.isEmpty(datas.get(6).text()) && !"--".equals(datas.get(6).text())) {
-        positionInfo.setTodayPrice(Double.parseDouble(datas.get(6).text().replaceAll(",", "")));
-      }
+        if (!StringUtils.isEmpty(datas.get(6).text()) && !"--".equals(datas.get(6).text())) {
+          positionInfo.setTodayPrice(Double.parseDouble(datas.get(6).text().replaceAll(",", "")));
+        }
 
-      if (!StringUtils.isEmpty(datas.get(7).text()) && !"--".equals(datas.get(7).text())) {
-        positionInfo.setProfit(Double.parseDouble(datas.get(7).text().replaceAll(",", "")));
-      }
+        if (!StringUtils.isEmpty(datas.get(7).text()) && !"--".equals(datas.get(7).text())) {
+          positionInfo.setProfit(Double.parseDouble(datas.get(7).text().replaceAll(",", "")));
+        }
 
-      if (!StringUtils.isEmpty(datas.get(8).text()) && !"--".equals(datas.get(8).text())) {
-        positionInfo.setDealMargin(Double.parseDouble(datas.get(8).text().replaceAll(",", "")));
+        if (!StringUtils.isEmpty(datas.get(8).text()) && !"--".equals(datas.get(8).text())) {
+          positionInfo.setDealMargin(Double.parseDouble(datas.get(8).text().replaceAll(",", "")));
+        }
+        positionInfo.setSpeculateHedging(datas.get(9).text());
+        positionInfoService.findOrCreate(positionInfo);
       }
-      positionInfo.setSpeculateHedging(datas.get(9).text());
-      positionInfoService.findOrCreate(positionInfo);
-    }
+    }catch (Exception e){}
   }
 
   @Autowired
