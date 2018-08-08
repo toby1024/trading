@@ -56,6 +56,7 @@ public class CatchDataServiceImpl implements CatchDataService {
     Date catchDate = catchParameterDto.getStartDate();
     Date endDate = catchParameterDto.getEndDate();
     while (!catchDate.after(endDate)) {
+      logger.info("开始抓取数据" + DateFormatUtils.format(catchDate, "yyyy-MM-dd"));
       try {
         Calendar cal = Calendar.getInstance();
         cal.setTime(catchDate);
@@ -85,7 +86,8 @@ public class CatchDataServiceImpl implements CatchDataService {
         // 持仓明细
         savePositionInfo(elements, clientInfo, date);
       }catch (Exception e){
-        logger.error(e.getMessage(), e);
+        logger.error(DateFormatUtils.format(catchDate, "yyyy-MM-dd") + "-->无数据或数据出错");
+        logger.error(e.getMessage());
       }
       catchDate = DateUtils.addDays(catchDate, 1);
     }
