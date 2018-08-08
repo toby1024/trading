@@ -67,6 +67,15 @@ public class CatchDataServiceImpl implements CatchDataService {
 
         params.put("tradeDate", DateFormatUtils.format(catchDate, "yyyy-MM-dd"));
         responseBody = HttpUtil.post(POST_URL, catchParameterDto.getJSessionId(), params).replaceAll("&nbsp;", "");
+        logger.info("");
+        logger.info("");
+        logger.info("");
+        logger.info("");
+        logger.info(responseBody);
+        logger.info("");
+        logger.info("");
+        logger.info("");
+        logger.info("");
         document = Jsoup.parse(responseBody);
         Element element = document.getElementById("waitBody");
         Elements elements = element.select("table");
