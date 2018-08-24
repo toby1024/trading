@@ -27,6 +27,7 @@
     <div style="border-bottom: 1px solid #eee;margin-bottom: 5px;">
         <form class="form-inline" action="/position">
             <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}">
+
             <div class="form-group">
                 <label for="name">姓名</label>
                 <input type="text" class="form-control" id="name" name="name" th:value="${searchCondition.name}">

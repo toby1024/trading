@@ -42,6 +42,6 @@ spring:
 spring:
   profiles: prod
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://skio2015.mysql.rds.aliyuncs.com:3906/trading?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
+    username: trad
+    password: trad@123_456
