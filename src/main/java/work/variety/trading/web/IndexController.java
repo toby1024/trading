@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import work.variety.trading.entity.User;
+import work.variety.trading.service.ClientInfoService;
 import work.variety.trading.service.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -35,6 +36,7 @@ public class IndexController {
     }
     if (u != null) {
       session.setAttribute("user", u);
+      session.setAttribute("clientInfos", clientInfoService.all());
       return "redirect:/position";
     } else {
       model.addAttribute("message", "登录失败，用户名或密码错误");
@@ -44,4 +46,6 @@ public class IndexController {
 
   @Autowired
   private UserService userService;
+  @Autowired
+  private ClientInfoService clientInfoService;
 }

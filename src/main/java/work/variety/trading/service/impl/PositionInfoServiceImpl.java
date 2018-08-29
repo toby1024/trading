@@ -72,8 +72,9 @@ public class PositionInfoServiceImpl implements PositionInfoService {
   public List<Map> lineChartData(SearchPositionDto searchPositionDto, List<String> dates) {
     searchPositionDto.setPage(false);
     List<Map> list = new ArrayList<>();
+    Integer oldClientInfoId = searchPositionDto.getClientInfoId();
 
-    List<ClientInfo> clientInfos = clientInfoDao.findByName(searchPositionDto.getName());
+    List<ClientInfo> clientInfos = clientInfoDao.findById(searchPositionDto.getClientInfoId());
     clientInfos.forEach(clientInfo -> {
       Map<String, Object> map = new HashMap<>();
       map.put("name", clientInfo.getName());
@@ -110,6 +111,7 @@ public class PositionInfoServiceImpl implements PositionInfoService {
       list.add(map);
     });
 
+    searchPositionDto.setClientInfoId(oldClientInfoId);
     return list;
   }
 

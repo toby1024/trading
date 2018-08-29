@@ -84,6 +84,9 @@
         <if test="dealType != null and dealType !=''">
           and a.deal_type = #{dealType}
         </if>
+        <if test="clientInfoId != null and clientInfoId !=''">
+          and b.id = #{clientInfoId}
+        </if>
       </where>
       GROUP BY client_info_id, DATE(deal_date), deal_type
   </sql>

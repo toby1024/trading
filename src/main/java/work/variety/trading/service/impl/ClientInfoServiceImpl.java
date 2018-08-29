@@ -9,6 +9,8 @@ import work.variety.trading.dao.ClientInfoMapper;
 import work.variety.trading.entity.ClientInfo;
 import work.variety.trading.service.ClientInfoService;
 
+import java.util.List;
+
 /**
  * @author zhangbin
  * @date 2018/7/26 11:03
@@ -39,6 +41,11 @@ public class ClientInfoServiceImpl implements ClientInfoService {
     clientInfo.setStockCapitalNumber(StringUtils.trimAllWhitespace(row.getCell(7).getStringCellValue()));
     clientInfo = createOrFind(clientInfo);
     return clientInfo;
+  }
+
+  @Override
+  public List<ClientInfo> all() {
+    return clientInfoDao.all();
   }
 
   @Autowired

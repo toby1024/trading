@@ -16,4 +16,15 @@
       WHERE name like concat('%', #{name}, '%')
     </if>
   </select>
+
+  <select id="findById" resultMap="clientInfoMapper">
+    select * from client_info
+    <if test="id!=null and id != ''">
+      WHERE id = #{id}
+    </if>
+  </select>
+
+  <select id="all" resultMap="clientInfoMapper">
+    select * from client_info
+  </select>
 </mapper>

@@ -22,11 +22,15 @@
     <div style="border-bottom: 1px solid #eee;margin-bottom: 5px;">
         <form class="form-inline" action="/position/detail">
             <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}">
-            <input type="hidden" id="clientInfoId" name="clientInfoId" th:value="${searchCondition.clientInfoId}">
+
             <input type="hidden" id="positionDay" name="positionDay" th:value="${#dates.format(searchCondition.positionDay,'yyyy-MM-dd')}">
             <div class="form-group">
-                <label for="name">姓名</label>
-                <input type="text" class="form-control" id="name" name="name" th:value="${searchCondition.name}">
+                <label for="clientInfoId">姓名</label>
+                <select name="clientInfoId" id="clientInfoId" class="form-control">
+                    <option value="">全部</option>
+                    <option th:each="clientInfo : ${session.clientInfos}" th:value="${clientInfo.id}" th:text="${clientInfo.name}" th:selected="${clientInfo.id == searchCondition.clientInfoId}">
+                    </option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="startDate">日期</label>
@@ -84,7 +88,7 @@
 
                 <li><a href="javaScript:void(0);" th:if="${page.pages > 11}">...</a></li>
 
-                <li th:each="pageNum:${#numbers.sequence(page.pages-2, page.pages)}"  th:classappend="${pageNum eq page.pageNum} ? active : ''" th:if="${page.pages > 15}">
+                <li th:each="pageNum:${#numbers.sequence(page.pages-2, page.pages)}"  th:classappend="${pageNum eq page.pageNum} ? active : ''" th:if="${page.pages > 15 && page.pages < 21}">
                     <a href="javaScript:void(0);" th:onclick="'javaScript:jump('+${pageNum}+');'" th:text="${pageNum}" ></a>
                 </li>
 
@@ -107,7 +111,6 @@
                 }
                 function search() {
                     $("#pageNum").val(1);
-                    $("#clientInfoId").val('');
                     $("#positionDay").val('');
                     $("form")[0].submit();
                 }

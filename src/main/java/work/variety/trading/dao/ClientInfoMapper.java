@@ -27,4 +27,8 @@ public interface ClientInfoMapper {
   ClientInfo findByFuturesCapitalNumber(@Param("futuresCapitalNumber") String futuresCapitalNumber);
 
   List<ClientInfo> findByName(@Param("name") String name);
+
+  List<ClientInfo> findById(@Param("id") Integer id);
+
+  List<ClientInfo> all();
 }

@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import work.variety.trading.dto.AccountDto;
 import work.variety.trading.dto.PageDto;
 import work.variety.trading.dto.SearchAccountDto;
+import work.variety.trading.entity.ClientInfo;
 import work.variety.trading.service.DayAccountSummaryService;
+
+import java.util.List;
 
 /**
  * @author zhangbin
