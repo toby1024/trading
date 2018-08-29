@@ -15,6 +15,8 @@ public interface StorageService {
 
   String storeTXT(MultipartFile file);
 
+  String storeZip(MultipartFile file);
+
   Stream<Path> loadAll();
 
   Path load(String filename);

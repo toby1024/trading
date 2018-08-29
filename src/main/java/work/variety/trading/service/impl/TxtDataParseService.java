@@ -1,9 +1,8 @@
 package work.variety.trading.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +32,9 @@ import java.util.regex.Pattern;
  * @author zhangbin
  * @date 2018/7/31 14:13
  */
+@Slf4j
 @Service("txtDataParseService")
 public class TxtDataParseService implements FileParseService {
-  private Logger logger = LoggerFactory.getLogger(TxtDataParseService.class);
 
   private static final String DATE_PARSE_STR = "YYYYMMdd";
   private static final String DATETIME_PARSE_STR = "YYYY-MM-dd HH:mm:ss";
@@ -67,15 +66,16 @@ public class TxtDataParseService implements FileParseService {
       ClientInfo clientInfo = new ClientInfo();
       DayAccountSummary dayAccountSummary = new DayAccountSummary();
 
+      log.info("开始解析txt文件：" + filename);
       for (int i = 0; i < lines.size(); i++) {
         String line = lines.get(i);
-        System.out.println(line);
 
         // 交易结算单
         if (line.contains("交易结算单(盯市) Settlement Statement(MTM)")) {
           isClient = true;
         }
         if (isClient) {
+          log.info("--------解析client info--------");
           if (line.startsWith("客户号 Client ID")) {
             clientInfo = saveClientInfo(line);
           }
@@ -95,6 +95,7 @@ public class TxtDataParseService implements FileParseService {
           isAccount = true;
         }
         if (isAccount) {
+          log.info("--------解析资金情况--------");
           String first = "期初结存 Balance b/f：";
           if (line.startsWith(first)) {
             double[] datas = getData(first, "基础保证金 Initial Margin：", line);
@@ -210,6 +211,7 @@ public class TxtDataParseService implements FileParseService {
           isDeal = true;
         }
         if (isDeal) {
+          log.info("--------解析交易情况--------");
           saveDealInfo(line, clientInfo);
         }
 
@@ -220,6 +222,7 @@ public class TxtDataParseService implements FileParseService {
           isPosition = true;
         }
         if (isPosition) {
+          log.info("--------解析持仓情况--------");
           if (firstPosition) {
             if (StringUtils.isEmpty(StringUtils.trimAllWhitespace(lines.get(i + 1)))) {
               i = i + 10;
@@ -235,10 +238,14 @@ public class TxtDataParseService implements FileParseService {
           savePositionInfo(line, clientInfo, date);
         }
       }
+      dayAccountSummaryService.deleteByClientAndDate(clientInfo.getId(), date);
       saveDayAccountSummary(dayAccountSummary);
+      log.info("-------解析txt文件完成--------");
     } catch (IOException e) {
       e.printStackTrace();
+      log.error(e.getMessage(), e);
     } catch (ParseException e) {
+      log.error(e.getMessage(), e);
       e.printStackTrace();
     }
   }
@@ -304,7 +311,7 @@ public class TxtDataParseService implements FileParseService {
     positionInfo.setMarketValueShort(Double.parseDouble(datas[13]));
     positionInfo.setClientInfoId(clientInfo.getId());
     positionInfo.setPositionDay(date);
-    positionInfoService.findOrCreate(positionInfo);
+    positionInfoService.forceCreate(positionInfo);
   }
 
   private ClientInfo saveClientInfo(String line) {

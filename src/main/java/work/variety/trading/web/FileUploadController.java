@@ -15,6 +15,8 @@ import work.variety.trading.exception.ErrorFileException;
 import work.variety.trading.exception.StorageFileNotFoundException;
 import work.variety.trading.service.FileParseService;
 import work.variety.trading.service.StorageService;
+import work.variety.trading.service.impl.ZipFileParseService;
+import work.variety.trading.util.ZipUtil;
 
 /**
  * @author zhangbin
@@ -31,6 +33,8 @@ public class FileUploadController {
   private FileParseService dayExcelParseService;
   @Autowired
   private FileParseService txtDataParseService;
+  @Autowired
+  private ZipFileParseService zipFileParseService;
 
   @GetMapping("uploadMonth")
   public String uploadMonth() {
@@ -82,6 +86,17 @@ public class FileUploadController {
     String filename = storageService.storeTXT(file);
     txtDataParseService.parse(filename);
     redirectAttributes.addFlashAttribute("message", "成功上传并解析txt文件： " + file.getOriginalFilename() + "!");
+    return "redirect:/upload/uploadTxt";
+  }
+  @GetMapping("uploadZip")
+  public String uploadZip() {
+    return "upload/uploadZip";
+  }
+  @PostMapping("zip")
+  public String zip(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+    String filename = storageService.storeZip(file);
+    zipFileParseService.parse(filename);
+    redirectAttributes.addFlashAttribute("message", "成功上传并解析zip文件： " + file.getOriginalFilename() + "!");
     return "redirect:/upload/uploadTxt";
   }
 

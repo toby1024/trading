@@ -48,6 +48,9 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
   @Override
   public PageDto<AccountDto> search(SearchAccountDto searchAccountDto) {
 
+    searchAccountDto.setOrderBy("a.clientInfoId, a.accountDay");
+    searchAccountDto.setOrderDesc("desc");
+
     if (searchAccountDto.getStartDate() == null) {
       searchAccountDto.setStartDate(DateUtils.addDays(new Date(), -30));
     }

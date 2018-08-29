@@ -57,6 +57,16 @@ public class FileSystemStorageService implements StorageService {
     return filename;
   }
 
+  @Override
+  public String storeZip(MultipartFile file) {
+    String filename = StringUtils.cleanPath(file.getOriginalFilename());
+    if(!filename.endsWith("zip")){
+      throw new ErrorFileException("只支持zip文件上传");
+    }
+    saveFile(file, filename);
+    return filename;
+  }
+
   private void saveFile(MultipartFile file,String filename){
     try {
       if (file.isEmpty()) {
