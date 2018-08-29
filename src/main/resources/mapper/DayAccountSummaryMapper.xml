@@ -63,7 +63,7 @@
       <if test="name!=null and name != ''">
         and b.name like concat('%', #{name}, '%')
       </if>
-      <if test="clientInfoId != null">
+      <if test="clientInfoId != null and clientInfoId !=''">
         and a.clientInfoId = #{clientInfoId}
       </if>
       <if test="startDate != null">

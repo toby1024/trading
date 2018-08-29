@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 public class PositionStatDto {
 
-  private int clientInfoId;
+  private Integer clientInfoId;
   private String name;
   private int buyBoardLot;
   private int sellBoardLot;

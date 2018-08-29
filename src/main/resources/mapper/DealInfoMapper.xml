@@ -111,7 +111,7 @@
       <if test="contract != null and contract !=''">
         and a.contract like concat('%', #{contract}, '%')
       </if>
-      <if test="clientInfoId != null">
+      <if test="clientInfoId != null and clientInfoId !=''">
         and b.id = #{clientInfoId}
       </if>
     </where>
@@ -171,7 +171,7 @@
       <if test="contract != null and contract !=''">
         and a.contract like concat('%', #{contract}, '%')
       </if>
-      <if test="clientInfoId != null">
+      <if test="clientInfoId != null and clientInfoId !=''">
         and b.id = #{clientInfoId}
       </if>
     </where>
