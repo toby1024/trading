@@ -61,7 +61,7 @@
             <tr th:each="position : ${page.list}">
                 <td th:text="${position.name} "></td>
                 <td th:text="${#dates.format(position.positionDay,'yyyy-MM-dd')} "></td>
-                <td th:text="${position.contract} "></td>
+                <td th:text="${position.product} + ${position.contract} "></td>
                 <td th:text="${position.buyBoardLot} "></td>
                 <td th:text="${position.buyPrice} "></td>
                 <td th:text="${position.sellBoardLot} "></td>

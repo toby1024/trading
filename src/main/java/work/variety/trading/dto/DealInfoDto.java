@@ -19,5 +19,6 @@ public class DealInfoDto {
   private Double commission;
   private Double closeProfit;
   private String dealType;
+  private String product;
 
 }

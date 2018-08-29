@@ -92,7 +92,7 @@
   </sql>
 
   <sql id="collectByContract">
-    SELECT a.client_info_id, a.contract, DATE(a.deal_date) AS deal_date, b.name, a.deal_type, sum(deal_fee) AS deal_fee,
+    SELECT a.client_info_id, a.contract, a.product, DATE(a.deal_date) AS deal_date, b.name, a.deal_type, sum(deal_fee) AS deal_fee,
     sum(close_profit) AS close_profit, sum(board_lot) AS board_lot, sum(commission) AS commission
     FROM deal_info a LEFT JOIN client_info b ON a.client_info_id = b.id
     <where>
@@ -118,7 +118,7 @@
         and b.id = #{clientInfoId}
       </if>
     </where>
-    GROUP BY client_info_id, DATE(deal_date) , deal_type, a.contract
+    GROUP BY client_info_id, DATE(deal_date) , deal_type, a.contract, a.product
   </sql>
 
   <select id="collect" resultMap="dealInfoStat">

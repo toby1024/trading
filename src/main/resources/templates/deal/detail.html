@@ -71,7 +71,7 @@
             </tr>
             <tr th:each="deal : ${page.list}">
                 <td th:text="${deal.name} "></td>
-                <td th:text="${deal.contract} "></td>
+                <td th:text="${deal.product}+${deal.contract}"></td>
                 <td th:text="${#dates.format(deal.dealDate,'yyyy-MM-dd HH:mm:ss')} "></td>
                 <td th:text="${deal.dealNumber} "></td>
                 <td th:text="${deal.dealType} "></td>
