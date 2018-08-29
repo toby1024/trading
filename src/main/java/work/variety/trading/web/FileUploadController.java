@@ -83,21 +83,31 @@ public class FileUploadController {
   @PostMapping("txt")
   public String txt(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
-    String filename = storageService.storeTXT(file);
-    txtDataParseService.parse(filename);
-    redirectAttributes.addFlashAttribute("message", "成功上传并解析txt文件： " + file.getOriginalFilename() + "!");
+    try {
+      String filename = storageService.storeTXT(file);
+      txtDataParseService.parse(filename);
+      redirectAttributes.addFlashAttribute("message", "成功上传并解析txt文件： " + file.getOriginalFilename() + "!");
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("message", "解析文件失败");
+    }
     return "redirect:/upload/uploadTxt";
   }
+
   @GetMapping("uploadZip")
   public String uploadZip() {
     return "upload/uploadZip";
   }
+
   @PostMapping("zip")
-  public String zip(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
-    String filename = storageService.storeZip(file);
-    zipFileParseService.parse(filename);
-    redirectAttributes.addFlashAttribute("message", "成功上传并解析zip文件： " + file.getOriginalFilename() + "!");
-    return "redirect:/upload/uploadTxt";
+  public String zip(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    try {
+      String filename = storageService.storeZip(file);
+      zipFileParseService.parse(filename);
+      redirectAttributes.addFlashAttribute("message", "成功上传并解析zip文件： " + file.getOriginalFilename() + "!");
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("message", "解析文件失败");
+    }
+    return "redirect:/upload/uploadZip";
   }
 
 

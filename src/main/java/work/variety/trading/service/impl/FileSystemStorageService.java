@@ -5,6 +5,7 @@ package work.variety.trading.service.impl;
  * @date 2018/7/25 10:53
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -14,6 +15,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -35,12 +37,13 @@ public class FileSystemStorageService implements StorageService {
   @Autowired
   public FileSystemStorageService(StorageProperties properties) {
     this.rootLocation = Paths.get(properties.getLocation());
+    init();
   }
 
   @Override
   public String store(MultipartFile file) {
     String filename = StringUtils.cleanPath(file.getOriginalFilename());
-    if(!filename.endsWith("xls")){
+    if (!filename.endsWith("xls")) {
       throw new ErrorFileException("只支持excel文件上传");
     }
     saveFile(file, filename);
@@ -50,7 +53,7 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public String storeTXT(MultipartFile file) {
     String filename = StringUtils.cleanPath(file.getOriginalFilename());
-    if(!filename.endsWith("txt")){
+    if (!filename.endsWith("txt")) {
       throw new ErrorFileException("只支持txt文件上传");
     }
     saveFile(file, filename);
@@ -60,14 +63,14 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public String storeZip(MultipartFile file) {
     String filename = StringUtils.cleanPath(file.getOriginalFilename());
-    if(!filename.endsWith("zip")){
+    if (!filename.endsWith("zip")) {
       throw new ErrorFileException("只支持zip文件上传");
     }
     saveFile(file, filename);
     return filename;
   }
 
-  private void saveFile(MultipartFile file,String filename){
+  private void saveFile(MultipartFile file, String filename) {
     try {
       if (file.isEmpty()) {
         throw new StorageException("Failed to store empty file " + filename);
@@ -82,19 +85,18 @@ public class FileSystemStorageService implements StorageService {
         Files.copy(inputStream, this.rootLocation.resolve(filename),
           StandardCopyOption.REPLACE_EXISTING);
       }
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new StorageException("Failed to store file " + filename, e);
     }
   }
+
   @Override
   public Stream<Path> loadAll() {
     try {
       return Files.walk(this.rootLocation, 1)
         .filter(path -> !path.equals(this.rootLocation))
         .map(this.rootLocation::relativize);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new StorageException("Failed to read stored files", e);
     }
 
@@ -112,14 +114,12 @@ public class FileSystemStorageService implements StorageService {
       Resource resource = new UrlResource(file.toUri());
       if (resource.exists() || resource.isReadable()) {
         return resource;
-      }
-      else {
+      } else {
         throw new StorageFileNotFoundException(
           "Could not read file: " + filename);
 
       }
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       throw new StorageFileNotFoundException("Could not read file: " + filename, e);
     }
   }
@@ -132,9 +132,11 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public void init() {
     try {
-      Files.createDirectories(rootLocation);
-    }
-    catch (IOException e) {
+      File f = rootLocation.toFile();
+      if (!f.exists()) {
+        Files.createDirectories(rootLocation);
+      }
+    } catch (IOException e) {
       throw new StorageException("Could not initialize storage", e);
     }
   }
