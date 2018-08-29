@@ -12,6 +12,8 @@ import work.variety.trading.dto.SearchDayAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
 import work.variety.trading.service.DayAccountSummaryService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -52,12 +54,18 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     searchAccountDto.setOrderDesc("desc");
 
     if (searchAccountDto.getStartDate() == null) {
-      searchAccountDto.setStartDate(DateUtils.addDays(new Date(), -30));
+      Date startDate = DateUtils.addDays(new Date(), -30);
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      try {
+        searchAccountDto.setStartDate(sdf.parse(sdf.format(startDate)));
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
     }
 
     int count = accountDao.count(searchAccountDto);
     List<AccountDto> accounts = accountDao.search(searchAccountDto);
-    return new PageDto<AccountDto>(accounts, searchAccountDto.getPageNum(), count, searchAccountDto.getPageSize());
+    return new PageDto<>(accounts, searchAccountDto.getPageNum(), count, searchAccountDto.getPageSize());
   }
 
   @Override
