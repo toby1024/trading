@@ -1,6 +1,11 @@
 package work.variety.trading.service;
 
+import work.variety.trading.dto.AccountDto;
+import work.variety.trading.dto.PageDto;
+import work.variety.trading.dto.SearchAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
+
+import java.util.Date;
 
 /**
  * @author zhangbin
@@ -8,4 +13,11 @@ import work.variety.trading.entity.DayAccountSummary;
  */
 public interface DayAccountSummaryService {
   DayAccountSummary findOrCreate(DayAccountSummary dayAccountSummary);
+
+  DayAccountSummary forceCreate(DayAccountSummary dayAccountSummary);
+
+  int deleteByClientAndDate(int clientId, Date date);
+
+  PageDto<AccountDto> search(SearchAccountDto searchAccountDto);
+
 }

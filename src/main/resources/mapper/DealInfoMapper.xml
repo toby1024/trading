@@ -38,6 +38,19 @@
     <result column="contract" property="contract"/>
   </resultMap>
 
+  <insert id="save" parameterType="work.variety.trading.entity.DealInfo" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO deal_info (deal_date, contract, deal_number, deal_type, speculate_hedging, deal_price, board_lot,
+                           deal_fee, open_close, commission, close_profit, real_deal_date, client_info_id, exchange,
+                           product, realizedReceivedPaid)
+    VALUES(#{dealDate}, #{contract}, #{dealNumber}, #{dealType}, #{speculateHedging}, #{dealPrice}, #{boardLot},
+    #{dealFee}, #{openClose}, #{commission}, #{closeProfit}, #{realDealDate}, #{clientInfoId}, #{exchange},
+    #{product}, #{realizedReceivedPaid})
+  </insert>
+
+  <delete id="deleteByClientAndDate">
+    DELETE FROM deal_info WHERE client_info_id = #{clientInfoId} and deal_date = #{dealDate}
+  </delete>
+
   <select id="list" resultMap="dealInfo">
     SELECT * FROM deal_info order by deal_date desc
   </select>

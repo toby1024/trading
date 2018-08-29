@@ -43,6 +43,12 @@ public class PositionInfoServiceImpl implements PositionInfoService {
   }
 
   @Override
+  public PositionInfo forceCreate(PositionInfo positionInfo) {
+    positionInfoDao.save(positionInfo);
+    return positionInfo;
+  }
+
+  @Override
   public PageDto<PositionStatDto> stat(SearchPositionDto searchPositionDto) {
     if (searchPositionDto.getStartDate() == null) {
       searchPositionDto.setStartDate(DateUtils.addDays(new Date(), -30));
@@ -105,6 +111,11 @@ public class PositionInfoServiceImpl implements PositionInfoService {
     });
 
     return list;
+  }
+
+  @Override
+  public int deleteByClientAndDate(int clientId, Date date) {
+    return positionInfoDao.deleteByClientAndDate(clientId, date);
   }
 
   @Autowired

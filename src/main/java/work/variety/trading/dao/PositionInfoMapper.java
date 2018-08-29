@@ -2,12 +2,14 @@ package work.variety.trading.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import work.variety.trading.dto.PositionInfoDto;
 import work.variety.trading.dto.PositionStatDto;
 import work.variety.trading.dto.SearchPositionDto;
 import work.variety.trading.entity.PositionInfo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,4 +31,7 @@ public interface PositionInfoMapper {
   int count(SearchPositionDto searchPositionDto);
 
   List<PositionInfoDto> search(SearchPositionDto searchPositionDto);
+
+  int deleteByClientAndDate(@Param("clientId") int clientId, @Param("date") Date date);
 }
+

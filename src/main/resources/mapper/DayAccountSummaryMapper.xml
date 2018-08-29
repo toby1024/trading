@@ -1,19 +1,94 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="work.variety.trading.dao.DayAccountSummaryMapper">
+  <resultMap id="AccountDtoMapper" type="work.variety.trading.dto.AccountDto">
+    <id column="id" property="id"></id>
+    <result column="clientInfoId" property="clientInfoId"/>
+    <result column="balanceBF" property="balanceBF"/>
+    <result column="initialMargin" property="initialMargin"/>
+    <result column="depositWithdrawal" property="depositWithdrawal"/>
+    <result column="balanceCF" property="balanceCF"/>
+    <result column="realizedPL" property="realizedPL"/>
+    <result column="pledgeAmount" property="pledgeAmount"/>
+    <result column="mtmpl" property="mtmpl"/>
+    <result column="clientEquity" property="clientEquity"/>
+    <result column="exercisePL" property="exercisePL"/>
+    <result column="fXPledgeOcc" property="fXPledgeOcc"/>
+    <result column="commission" property="commission"/>
+    <result column="marginOccupied" property="marginOccupied"/>
+    <result column="exerciseFee" property="exerciseFee"/>
+    <result column="deliveryMargin" property="deliveryMargin"/>
+    <result column="deliveryFee" property="deliveryFee"/>
+    <result column="marketValueLong" property="marketValueLong"/>
+    <result column="newFXPledge" property="newFXPledge"/>
+    <result column="marketValueShort" property="marketValueShort"/>
+    <result column="fxRedemption" property="fxRedemption"/>
+    <result column="marketValueEquity" property="marketValueEquity"/>
+    <result column="chgInPledgeAmt" property="chgInPledgeAmt"/>
+    <result column="fundAvail" property="fundAvail"/>
+    <result column="premiumReceived" property="premiumReceived"/>
+    <result column="riskDegree" property="riskDegree"/>
+    <result column="premiumPaid" property="premiumPaid"/>
+    <result column="marginCall" property="marginCall"/>
+    <result column="chgInFXPledge" property="chgInFXPledge"/>
+    <result column="accountDay" property="accountDay"/>
+    <result column="fhbcdje" property="fhbcdje"/>
+    <result column="drzqlj" property="drzqlj"/>
+    <result column="hbcdje" property="hbcdje"/>
+    <result column="fdyk" property="fdyk"/>
+  </resultMap>
 
-  <insert id="save" parameterType="work.variety.trading.entity.DayAccountSummary">
-    INSERT INTO day_account_summary(clientInfoId,balanceBF,initialMargin,depositWithdrawal,balanceCF,realizedPL,pledgeAmount,mtmpl,
+  <insert id="save" parameterType="work.variety.trading.entity.DayAccountSummary" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO day_account_summary(clientInfoId, balanceBF,initialMargin,depositWithdrawal,balanceCF,realizedPL,pledgeAmount,mtmpl,
     clientEquity,exercisePL,fXPledgeOcc,commission,marginOccupied,exerciseFee,deliveryMargin,deliveryFee,marketValueLong,newFXPledge,
     marketValueShort,fxRedemption,marketValueEquity,chgInPledgeAmt,fundAvail,premiumReceived,riskDegree,premiumPaid,marginCall,
-    chgInFXPledge,accountDay,fhbcdje,drzqlj,hbcdje,khqy,fdyk,kyzj)
+    chgInFXPledge,accountDay,fhbcdje,drzqlj,hbcdje,fdyk)
     VALUES (#{clientInfoId},#{balanceBF},#{initialMargin},#{depositWithdrawal},#{balanceCF},#{realizedPL},#{pledgeAmount},#{mtmpl},
     #{clientEquity},#{exercisePL},#{fXPledgeOcc},#{commission},#{marginOccupied},#{exerciseFee},#{deliveryMargin},#{deliveryFee},#{marketValueLong},#{newFXPledge},
    #{marketValueShort},#{fxRedemption},#{marketValueEquity},#{chgInPledgeAmt},#{fundAvail},#{premiumReceived},#{riskDegree},#{premiumPaid},#{marginCall},
-    #{chgInFXPledge},#{accountDay},#{fhbcdje},#{drzqlj},#{hbcdje},#{khqy},#{fdyk},#{kyzj})
+    #{chgInFXPledge},#{accountDay},#{fhbcdje},#{drzqlj},#{hbcdje},#{fdyk})
   </insert>
 
   <select id="find" resultType="work.variety.trading.entity.DayAccountSummary">
     SELECT * FROM day_account_summary WHERE clientInfoId = #{clientInfoId} AND accountDay=#{accountDay}
+  </select>
+
+  <delete id="deleteByClientAndDate">
+     DELETE FROM day_account_summary WHERE clientInfoId = #{clientInfoId} and accountDay = #{dealDate}
+  </delete>
+
+  <sql id="searchSql">
+    SELECT a.*, b.name FROM day_account_summary a left join client_info b ON a.clientInfoId = b.id
+    <where>
+      <if test="name!=null and name != ''">
+        and b.name like concat('%', #{name}, '%')
+      </if>
+      <if test="clientInfoId != null">
+        and a.clientInfoId = #{clientInfoId}
+      </if>
+      <if test="startDate != null">
+        and a.accountDay &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and a.accountDay &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+
+    </where>
+  </sql>
+
+  <select id="count" resultType="java.lang.Integer">
+    SELECT count(*) FROM (
+      <include refid="searchSql"/>
+    ) a
+  </select>
+
+  <select id="search" resultMap="AccountDtoMapper">
+    <include refid="searchSql"/>
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    <if test="isPage">
+      LIMIT #{startPage}, #{pageSize}
+    </if>
   </select>
 </mapper>

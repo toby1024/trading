@@ -63,4 +63,16 @@ public class DealInfo {
    * 客户id
    */
   private int clientInfoId;
+  /**
+   * 交易所
+   */
+  private String exchange;
+  /**
+   * 品种
+   */
+  private String product;
+  /**
+   * 权利金收支
+   */
+  private Double realizedReceivedPaid;
 }

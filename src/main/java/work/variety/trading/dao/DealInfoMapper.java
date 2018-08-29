@@ -2,6 +2,7 @@ package work.variety.trading.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import work.variety.trading.dto.DealInfoContractDto;
 import work.variety.trading.dto.DealInfoDetailDto;
@@ -10,6 +11,7 @@ import work.variety.trading.dto.SearchDealInfoContractDto;
 import work.variety.trading.dto.SearchDealInfoDto;
 import work.variety.trading.entity.DealInfo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,8 +21,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface DealInfoMapper {
-  @Insert("INSERT INTO deal_info (deal_date, contract, deal_number, deal_type, speculate_hedging, deal_price, board_lot, deal_fee, open_close, commission, close_profit, real_deal_date, client_info_id)" +
-    "VALUES(#{dealDate}, #{contract}, #{dealNumber}, #{dealType}, #{speculateHedging}, #{dealPrice}, #{boardLot}, #{dealFee}, #{openClose}, #{commission}, #{closeProfit}, #{realDealDate}, #{clientInfoId})")
   int save(DealInfo dealInfo);
 
   List<DealInfo> list();
@@ -38,4 +38,6 @@ public interface DealInfoMapper {
   List<DealInfoDetailDto> detail(SearchDealInfoDto searchDealInfoDto);
 
   DealInfo findOne(DealInfo dealInfo);
+
+  int deleteByClientAndDate(@Param("clientInfoId") int clientInfoId, @Param("dealDate") Date dealDate);
 }

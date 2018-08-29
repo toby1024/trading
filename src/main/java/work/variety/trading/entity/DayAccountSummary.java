@@ -135,17 +135,9 @@ public class DayAccountSummary {
    */
   private Double hbcdje;
   /**
-   * 客户权益
-   */
-  private Double khqy;
-  /**
    * 浮动盈亏
    */
   private Double fdyk;
-  /**
-   * 可用资金
-   */
-  private Double kyzj;
   /**
    * 日期
    */

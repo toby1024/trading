@@ -8,6 +8,7 @@ import work.variety.trading.dto.SearchDealInfoContractDto;
 import work.variety.trading.dto.SearchDealInfoDto;
 import work.variety.trading.entity.DealInfo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,4 +26,10 @@ public interface DealInfoService {
   PageDto<DealInfoDetailDto> detail(SearchDealInfoDto searchDealInfoDto);
 
   DealInfo findOrCreate(DealInfo dealInfo);
+
+  int deleteByClientAndDate(int clientId, Date date);
+
+  DealInfo forceCreate(DealInfo dealInfo);
+
+
 }

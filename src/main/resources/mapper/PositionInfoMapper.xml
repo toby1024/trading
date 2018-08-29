@@ -41,6 +41,10 @@
     #{todayPrice},#{profit},#{speculateHedging},#{transactionNumber},#{clientInfoId},#{dealMargin},#{realDealDate})
   </insert>
 
+  <delete id="deleteByClientAndDate">
+    DELETE FROM position_info WHERE client_info_id = #{clientId} and position_day = #{date}
+  </delete>
+
   <select id="findOne" parameterType="work.variety.trading.entity.PositionInfo" resultMap="positionInfoMapper">
     SELECT * FROM position_info
     WHERE position_day = #{positionDay}

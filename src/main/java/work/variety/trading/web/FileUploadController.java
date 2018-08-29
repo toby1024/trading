@@ -43,8 +43,10 @@ public class FileUploadController {
     try {
       String filename = storeFile(file);
       monthExcelParseService.parse(filename);
+
       redirectAttributes.addFlashAttribute("message",
-        "成功上传并解析文件： " + file.getOriginalFilename() + "!");
+        "成功上传并解析月汇总文件： " + file.getOriginalFilename() + "!");
+
     } catch (ErrorFileException e) {
       redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
@@ -62,7 +64,7 @@ public class FileUploadController {
       String filename = storeFile(file);
       dayExcelParseService.parse(filename);
       redirectAttributes.addFlashAttribute("message",
-        "成功上传并解析文件： " + file.getOriginalFilename() + "!");
+        "成功上传并解析日文件： " + file.getOriginalFilename() + "!");
     } catch (ErrorFileException e) {
       redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
@@ -76,9 +78,10 @@ public class FileUploadController {
 
   @PostMapping("txt")
   public String txt(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+
     String filename = storageService.storeTXT(file);
     txtDataParseService.parse(filename);
-    redirectAttributes.addFlashAttribute("message", "成功上传并解析文件： " + file.getOriginalFilename() + "!");
+    redirectAttributes.addFlashAttribute("message", "成功上传并解析txt文件： " + file.getOriginalFilename() + "!");
     return "redirect:/upload/uploadTxt";
   }
 

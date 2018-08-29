@@ -18,7 +18,7 @@ public class PositionInfo {
   /**
    * 合约
    */
-  private  String contract;
+  private String contract;
   /**
    * 成交序号
    */
@@ -71,4 +71,18 @@ public class PositionInfo {
    * 关联的客户id
    */
   private int clientInfoId;
+  /**
+   * 品种
+   */
+  private String product;
+
+  /**
+   * 多头期权市值
+   */
+  private Double marketValueLong;
+
+  /**
+   * 空头期权市值
+   */
+  private Double marketValueShort;
 }

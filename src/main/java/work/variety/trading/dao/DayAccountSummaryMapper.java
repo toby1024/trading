@@ -1,9 +1,15 @@
 package work.variety.trading.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import work.variety.trading.dto.AccountDto;
+import work.variety.trading.dto.SearchAccountDto;
 import work.variety.trading.dto.SearchDayAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangbin
@@ -16,4 +22,10 @@ public interface DayAccountSummaryMapper {
   int save(DayAccountSummary dayAccountSummary);
 
   DayAccountSummary find(SearchDayAccountDto searchDayAccountDto);
+
+  int deleteByClientAndDate(@Param("clientInfoId") int clientInfoId, @Param("dealDate") Date dealDate);
+
+  int count(SearchAccountDto searchAccountDto);
+
+  List<AccountDto> search(SearchAccountDto searchAccountDto);
 }

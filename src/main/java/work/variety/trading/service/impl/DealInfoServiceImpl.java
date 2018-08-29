@@ -12,6 +12,7 @@ import work.variety.trading.dto.SearchDealInfoDto;
 import work.variety.trading.entity.DealInfo;
 import work.variety.trading.service.DealInfoService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,6 +55,17 @@ public class DealInfoServiceImpl implements DealInfoService {
     if (info != null) {
       return info;
     }
+    dealInfoDao.save(dealInfo);
+    return dealInfo;
+  }
+
+  @Override
+  public int deleteByClientAndDate(int clientId, Date date) {
+    return dealInfoDao.deleteByClientAndDate(clientId, date);
+  }
+
+  @Override
+  public DealInfo forceCreate(DealInfo dealInfo) {
     dealInfoDao.save(dealInfo);
     return dealInfo;
   }

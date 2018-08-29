@@ -133,7 +133,7 @@ public class CatchDataServiceImpl implements CatchDataService {
 
     element = accountElements.get(2).children().get(3).text();
     if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setKhqy(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      accountSummary.setClientEquity(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
     }
 
     element = accountElements.get(3).children().get(1).text();
@@ -188,7 +188,7 @@ public class CatchDataServiceImpl implements CatchDataService {
 
     element = accountElements.get(7).children().get(3).text();
     if (!StringUtils.isEmpty(element) && !"--".equals(element)) {
-      accountSummary.setKyzj(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
+      accountSummary.setFundAvail(Double.parseDouble(StringUtils.trimAllWhitespace(element.replaceAll(",", ""))));
     }
 
     element = accountElements.get(8).children().get(3).text();
