@@ -13,7 +13,7 @@
   <select id="findByName" resultMap="clientInfoMapper">
     select * from client_info
     <if test="name!=null and name != ''">
-      WHERE b.name like concat('%', #{name}, '%')
+      WHERE name like concat('%', #{name}, '%')
     </if>
   </select>
 </mapper>
