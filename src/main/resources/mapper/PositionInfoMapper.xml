@@ -99,6 +99,9 @@
   <sql id="searchSql">
     SELECT a.*,b.name FROM position_info a LEFT JOIN client_info b ON a.client_info_id = b.id
     <where>
+      <if test="clientInfoId!=null and clientInfoId != ''">
+        and a.client_info_id = #{clientInfoId}
+      </if>
       <if test="name!=null and name != ''">
         and b.name like concat('%', #{name}, '%')
       </if>

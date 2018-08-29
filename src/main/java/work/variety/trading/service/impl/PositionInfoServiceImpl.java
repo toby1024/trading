@@ -65,7 +65,7 @@ public class PositionInfoServiceImpl implements PositionInfoService {
     }
     int count = positionInfoDao.count(searchPositionDto);
     List<PositionInfoDto> list = positionInfoDao.search(searchPositionDto);
-    return new PageDto<PositionInfoDto>(list, searchPositionDto.getPageNum(), count, searchPositionDto.getPageSize());
+    return new PageDto<>(list, searchPositionDto.getPageNum(), count, searchPositionDto.getPageSize());
   }
 
   @Override
