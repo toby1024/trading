@@ -1,0 +1,127 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{decorator/head::header}">
+</head>
+<body>
+<script>
+    $(function () {
+        $("#startDate").datepicker();
+        $("#endDate").datepicker();
+    });
+</script>
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="~{decorator/menu::menu}">
+
+</nav>
+
+<!-- Begin page content -->
+<div class="container">
+    <div class="page-header">
+        <h1>账户资金状况</h1>
+    </div>
+
+    <div>
+        <table class="table table-bordered">
+            <tr>
+                <td>日期</td>
+                <td th:text="${#dates.format(accountDto.accountDay,'yyyy-MM-dd')} "></td>
+                <td>期初结存</td>
+                <td th:text="${accountDto.balanceBF}"></td>
+            </tr>
+
+            <tr>
+                <td>基础保证金</td>
+                <td th:text="${accountDto.initialMargin}"></td>
+                <td>出 入 金</td>
+                <td th:text="${accountDto.depositWithdrawal}"></td>
+            </tr>
+
+            <tr>
+                <td>期末结存</td>
+                <td th:text="${accountDto.balanceCF}"></td>
+                <td>平仓盈亏</td>
+                <td th:text="${accountDto.realizedPL}"></td>
+            </tr>
+
+            <tr>
+                <td>质 押 金</td>
+                <td th:text="${accountDto.pledgeAmount}"></td>
+                <td>持仓盯市盈亏</td>
+                <td th:text="${accountDto.mtmpl}"></td>
+            </tr>
+
+            <tr>
+                <td>客户权益</td>
+                <td th:text="${accountDto.clientEquity}"></td>
+                <td>期权执行盈亏</td>
+                <td th:text="${accountDto.exercisePL}"></td>
+            </tr>
+
+            <tr>
+                <td>货币质押保证金占用</td>
+                <td th:text="${accountDto.fXPledgeOcc}"></td>
+                <td>手 续 费</td>
+                <td th:text="${accountDto.commission}"></td>
+            </tr>
+
+            <tr>
+                <td>保证金占用</td>
+                <td th:text="${accountDto.marginOccupied}"></td>
+                <td>行权手续费</td>
+                <td th:text="${accountDto.exerciseFee}"></td>
+            </tr>
+
+            <tr>
+                <td>交割保证金</td>
+                <td th:text="${accountDto.deliveryMargin}"></td>
+                <td>交割手续费</td>
+                <td th:text="${accountDto.deliveryFee}"></td>
+            </tr>
+
+            <tr>
+                <td>多头期权市值</td>
+                <td th:text="${accountDto.marketValueLong}"></td>
+                <td>货币质入</td>
+                <td th:text="${accountDto.newFXPledge}"></td>
+            </tr>
+
+            <tr>
+                <td>空头期权市值</td>
+                <td th:text="${accountDto.marketValueShort}"></td>
+                <td>货币质出</td>
+                <td th:text="${accountDto.fxRedemption} "></td>
+            </tr>
+
+            <tr>
+                <td>市值权益</td>
+                <td th:text="${accountDto.marketValueEquity}"></td>
+                <td>质押变化金额</td>
+                <td th:text="${accountDto.chgInPledgeAmt}"></td>
+            </tr>
+
+            <tr>
+                <td>可用资金</td>
+                <td th:text="${accountDto.fundAvail}"></td>
+                <td>权利金收入</td>
+                <td th:text="${accountDto.premiumReceived}"></td>
+            </tr>
+
+            <tr>
+                <td>风 险 度</td>
+                <td th:text="${accountDto.riskDegree}+'%'"></td>
+                <td>权利金支出</td>
+                <td th:text="${accountDto.premiumPaid}"></td>
+            </tr>
+
+            <tr>
+                <td>应追加资金</td>
+                <td th:text="${accountDto.marginCall}"></td>
+                <td>货币质押变化金额</td>
+                <td th:text="${accountDto.chgInFXPledge}"></td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<footer th:replace="~{decorator/footer::footer}"></footer>
+</body>
+</html>

@@ -20,4 +20,6 @@ public interface DayAccountSummaryService {
 
   PageDto<AccountDto> search(SearchAccountDto searchAccountDto);
 
+  AccountDto detail(Integer id);
+
 }

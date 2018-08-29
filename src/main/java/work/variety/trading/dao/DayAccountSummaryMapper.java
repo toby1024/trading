@@ -28,4 +28,6 @@ public interface DayAccountSummaryMapper {
   int count(SearchAccountDto searchAccountDto);
 
   List<AccountDto> search(SearchAccountDto searchAccountDto);
+
+  AccountDto detail(@Param("id") Integer id);
 }

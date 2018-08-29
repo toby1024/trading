@@ -91,4 +91,9 @@
       LIMIT #{startPage}, #{pageSize}
     </if>
   </select>
+
+  <select id="detail" resultMap="AccountDtoMapper">
+    SELECT a.*, b.name FROM day_account_summary a left join client_info b ON a.clientInfoId = b.id
+    where a.id =#{id}
+  </select>
 </mapper>

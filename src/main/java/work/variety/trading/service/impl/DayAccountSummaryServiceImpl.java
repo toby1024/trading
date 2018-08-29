@@ -57,6 +57,11 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     return new PageDto<AccountDto>(accounts, searchAccountDto.getPageNum(), count, searchAccountDto.getPageSize());
   }
 
+  @Override
+  public AccountDto detail(Integer id) {
+    return accountDao.detail(id);
+  }
+
   @Autowired
   private DayAccountSummaryMapper accountDao;
 }

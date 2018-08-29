@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import work.variety.trading.dto.AccountDto;
 import work.variety.trading.dto.PageDto;
@@ -26,6 +27,12 @@ public class AccountSummaryController {
     model.addAttribute("searchCondition", searchAccountDto);
 
     return "account/index";
+  }
+  @GetMapping("{id}/show")
+  public String show(Model model, @PathVariable("id") Integer id){
+    AccountDto accountDto = dayAccountSummaryService.detail(id);
+    model.addAttribute("accountDto", accountDto);
+    return "account/detail";
   }
 
   @Autowired
