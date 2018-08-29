@@ -61,7 +61,7 @@ public class TxtDataParseService implements FileParseService {
       boolean isDeal = false;
       boolean isPosition = false;
       boolean firstPosition = true;
-      boolean needDelete = true;
+      boolean needDelete = false;
 
       ClientInfo clientInfo = new ClientInfo();
       DayAccountSummary dayAccountSummary = new DayAccountSummary();
@@ -80,6 +80,7 @@ public class TxtDataParseService implements FileParseService {
             clientInfo = saveClientInfo(line);
           }
           if (line.startsWith("日期")) {
+            needDelete = true;
             String[] array = line.split("：");
             date = DateUtils.parseDate(StringUtils.trimAllWhitespace(array[1]), DATE_PARSE_STR);
           }
