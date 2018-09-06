@@ -96,4 +96,45 @@
     SELECT a.*, b.name FROM day_account_summary a left join client_info b ON a.clientInfoId = b.id
     where a.id =#{id}
   </select>
+
+  <resultMap id="AccountStatDtoMapper" type="work.variety.trading.dto.AccountStatDto">
+    <result column="clientInfoId" property="clientInfoId"/>
+    <result column="depositWithdrawal" property="depositWithdrawal"/>
+    <result column="commission" property="commission"/>
+  </resultMap>
+
+  <sql id="statCommissionSql">
+    SELECT clientInfoId, sum(`commission`) * #{rate} AS commission, sum(depositWithdrawal) AS depositWithdrawal
+    FROM `day_account_summary`
+    <where>
+      <if test="clientInfoId != null and clientInfoId !=''">
+        and clientInfoId = #{clientInfoId}
+      </if>
+      <if test="startDate != null">
+        and accountDay &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and accountDay &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+    </where>
+    GROUP BY `clientInfoId`
+  </sql>
+
+  <select id="countStatCommission" resultType="java.lang.Integer">
+    SELECT count(*) FROM (
+      <include refid="statCommissionSql"/>
+    ) a
+  </select>
+
+  <select id="statCommission" resultMap="AccountStatDtoMapper">
+    SELECT a.*, b.name FROM (
+      <include refid="statCommissionSql"/>
+    ) a LEFT JOIN client_info b ON a.clientInfoId = b.id
+    <if test="orderBy != null">
+      ORDER BY ${orderBy} ${orderDesc}
+    </if>
+    <if test="isPage">
+      LIMIT #{startPage}, #{pageSize}
+    </if>
+  </select>
 </mapper>

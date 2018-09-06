@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import work.variety.trading.dao.DayAccountSummaryMapper;
 import work.variety.trading.dto.AccountDto;
+import work.variety.trading.dto.AccountStatDto;
 import work.variety.trading.dto.PageDto;
 import work.variety.trading.dto.PositionStatDto;
 import work.variety.trading.dto.SearchAccountDto;
@@ -53,15 +54,7 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     searchAccountDto.setOrderBy("a.clientInfoId, a.accountDay");
     searchAccountDto.setOrderDesc("desc");
 
-    if (searchAccountDto.getStartDate() == null) {
-      Date startDate = DateUtils.addDays(new Date(), -30);
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      try {
-        searchAccountDto.setStartDate(sdf.parse(sdf.format(startDate)));
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-    }
+    setDefaultDate(searchAccountDto);
 
     int count = accountDao.count(searchAccountDto);
     List<AccountDto> accounts = accountDao.search(searchAccountDto);
@@ -71,6 +64,39 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
   @Override
   public AccountDto detail(Integer id) {
     return accountDao.detail(id);
+  }
+
+  @Override
+  public PageDto<AccountStatDto> statCommission(SearchAccountDto searchAccountDto) {
+    setDefaultDate(searchAccountDto);
+
+    searchAccountDto.setOrderBy("clientInfoId");
+    searchAccountDto.setOrderDesc("desc");
+
+    int count = accountDao.countStatCommission(searchAccountDto);
+    List<AccountStatDto> list = accountDao.statCommission(searchAccountDto);
+    return new PageDto<>(list, searchAccountDto.getPageNum(), count, searchAccountDto.getPageSize());
+  }
+
+  private void setDefaultDate(SearchAccountDto searchAccountDto){
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    if (searchAccountDto.getStartDate() == null) {
+      Date startDate = DateUtils.addDays(new Date(), -30);
+      try {
+        searchAccountDto.setStartDate(sdf.parse(sdf.format(startDate)));
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    }
+
+    if (searchAccountDto.getEndDate() == null) {
+      Date endDate = new Date();
+      try {
+        searchAccountDto.setEndDate(sdf.parse(sdf.format(endDate)));
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   @Autowired

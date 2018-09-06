@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import work.variety.trading.dto.AccountDto;
+import work.variety.trading.dto.AccountStatDto;
 import work.variety.trading.dto.SearchAccountDto;
 import work.variety.trading.dto.SearchDayAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
@@ -30,4 +31,8 @@ public interface DayAccountSummaryMapper {
   List<AccountDto> search(SearchAccountDto searchAccountDto);
 
   AccountDto detail(@Param("id") Integer id);
+
+  int countStatCommission(SearchAccountDto searchAccountDto);
+
+  List<AccountStatDto> statCommission(SearchAccountDto searchAccountDto);
 }

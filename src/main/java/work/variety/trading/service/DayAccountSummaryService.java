@@ -1,8 +1,10 @@
 package work.variety.trading.service;
 
 import work.variety.trading.dto.AccountDto;
+import work.variety.trading.dto.AccountStatDto;
 import work.variety.trading.dto.PageDto;
 import work.variety.trading.dto.SearchAccountDto;
+import work.variety.trading.dto.SearchDayAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
 
 import java.util.Date;
@@ -21,5 +23,7 @@ public interface DayAccountSummaryService {
   PageDto<AccountDto> search(SearchAccountDto searchAccountDto);
 
   AccountDto detail(Integer id);
+
+  PageDto<AccountStatDto> statCommission(SearchAccountDto searchAccountDto);
 
 }

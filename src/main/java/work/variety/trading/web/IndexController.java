@@ -21,8 +21,12 @@ import java.security.NoSuchAlgorithmException;
 public class IndexController {
 
   @RequestMapping("/index")
-  public String index() {
-    return "index";
+  public String index(HttpSession session) {
+    if(session.getAttribute("user") == null) {
+      return "index";
+    }else{
+      return "redirect: /account/stat";
+    }
   }
 
   @PostMapping("/login")

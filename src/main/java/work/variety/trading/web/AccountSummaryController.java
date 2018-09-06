@@ -38,6 +38,13 @@ public class AccountSummaryController {
     return "account/detail";
   }
 
+  @GetMapping("stat")
+  public String stat(Model model, SearchAccountDto searchAccountDto){
+    model.addAttribute("searchCondition", searchAccountDto);
+    model.addAttribute("page", dayAccountSummaryService.statCommission(searchAccountDto));
+    return "account/stat";
+  }
+
   @Autowired
   private DayAccountSummaryService dayAccountSummaryService;
 

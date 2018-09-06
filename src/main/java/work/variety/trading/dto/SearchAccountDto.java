@@ -19,4 +19,6 @@ public class SearchAccountDto extends BaseSearchPageDto{
 
   private Integer clientInfoId;
   private boolean isPage = true;
+
+  private Double rate = 1D;
 }
