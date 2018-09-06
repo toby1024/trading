@@ -36,7 +36,7 @@ public class ZipFileParseService implements FileParseService {
       ZipUtil.unZip(rootLocation + "/" + filename, rootLocation.toString());
       String[] txt = {"txt"};
       Collection<File> files = FileUtils.listFiles(new File(rootLocation + "/" + filename.substring(0, filename.lastIndexOf("."))), txt, false);
-      files.stream().forEach(file -> {
+      files.parallelStream().forEach(file -> {
         log.info("----解析：" + file.getAbsolutePath());
         txtDataParseService.parse(filename.substring(0, filename.lastIndexOf(".")) + "/" + file.getName());
       });
