@@ -137,4 +137,20 @@
       LIMIT #{startPage}, #{pageSize}
     </if>
   </select>
+  
+  <select id="collectStatCommission" resultMap="AccountStatDtoMapper">
+    SELECT sum(`commission`) * #{rate} AS commission, sum(depositWithdrawal) AS depositWithdrawal
+    FROM `day_account_summary`
+    <where>
+      <if test="clientInfoId != null and clientInfoId !=''">
+        and clientInfoId = #{clientInfoId}
+      </if>
+      <if test="startDate != null">
+        and accountDay &gt;= #{startDate}
+      </if>
+      <if test="endDate != null">
+        and accountDay &lt; DATE_ADD(#{endDate},INTERVAL 1 DAY)
+      </if>
+    </where>
+  </select>
 </mapper>

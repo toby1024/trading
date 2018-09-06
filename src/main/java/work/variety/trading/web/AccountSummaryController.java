@@ -42,6 +42,7 @@ public class AccountSummaryController {
   public String stat(Model model, SearchAccountDto searchAccountDto){
     model.addAttribute("searchCondition", searchAccountDto);
     model.addAttribute("page", dayAccountSummaryService.statCommission(searchAccountDto));
+    model.addAttribute("collectStatCommission", dayAccountSummaryService.collectStatCommission(searchAccountDto));
     return "account/stat";
   }
 

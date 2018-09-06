@@ -78,6 +78,11 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     return new PageDto<>(list, searchAccountDto.getPageNum(), count, searchAccountDto.getPageSize());
   }
 
+  @Override
+  public AccountStatDto collectStatCommission(SearchAccountDto searchAccountDto) {
+    return accountDao.collectStatCommission(searchAccountDto);
+  }
+
   private void setDefaultDate(SearchAccountDto searchAccountDto){
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     if (searchAccountDto.getStartDate() == null) {

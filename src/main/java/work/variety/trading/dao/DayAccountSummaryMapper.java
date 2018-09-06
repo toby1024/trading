@@ -35,4 +35,6 @@ public interface DayAccountSummaryMapper {
   int countStatCommission(SearchAccountDto searchAccountDto);
 
   List<AccountStatDto> statCommission(SearchAccountDto searchAccountDto);
+
+  AccountStatDto collectStatCommission(SearchAccountDto searchAccountDto);
 }

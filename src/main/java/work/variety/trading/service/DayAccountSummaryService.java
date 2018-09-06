@@ -26,4 +26,6 @@ public interface DayAccountSummaryService {
 
   PageDto<AccountStatDto> statCommission(SearchAccountDto searchAccountDto);
 
+  AccountStatDto collectStatCommission(SearchAccountDto searchAccountDto);
+
 }

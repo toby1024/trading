@@ -46,6 +46,25 @@
         </form>
     </div>
     <div>
+        <div class="page-header"><h5>手续费，出入金汇总</h5></div>
+        <table class="table table-bordered">
+            <tr>
+                <th></th>
+                <th>日期</th>
+                <th>手续费</th>
+                <th>出入金</th>
+            </tr>
+            <tr>
+                <td>汇总</td>
+                <td th:text="${#dates.format(searchCondition.startDate,'yyyy-MM-dd')} + '~' + ${#dates.format(searchCondition.endDate,'yyyy-MM-dd')} "></td>
+                <td th:text="${collectStatCommission.commission}"></td>
+                <td th:text="${collectStatCommission.depositWithdrawal}"></td>
+            </tr>
+        </table>
+        <div class="page-header"><h5>手续费，出入金明细</h5></div>
+        <div>
+
+        </div>
         <table class="table table-bordered">
             <tr>
                 <th>日期</th>
@@ -59,6 +78,7 @@
                 <td th:text="${accountStat.commission} "></td>
                 <td th:text="${accountStat.depositWithdrawal} "></td>
             </tr>
+
         </table>
 
         <nav aria-label="Page navigation">

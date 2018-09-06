@@ -41,7 +41,7 @@ public class IndexController {
     if (u != null) {
       session.setAttribute("user", u);
       session.setAttribute("clientInfos", clientInfoService.all());
-      return "redirect:/position";
+      return "redirect:/account/stat";
     } else {
       model.addAttribute("message", "登录失败，用户名或密码错误");
       return "redirect:/";
