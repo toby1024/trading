@@ -13,6 +13,7 @@ import work.variety.trading.entity.ClientInfo;
 import work.variety.trading.service.DayAccountSummaryService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangbin
@@ -43,6 +44,11 @@ public class AccountSummaryController {
     model.addAttribute("searchCondition", searchAccountDto);
     model.addAttribute("page", dayAccountSummaryService.statCommission(searchAccountDto));
     model.addAttribute("collectStatCommission", dayAccountSummaryService.collectStatCommission(searchAccountDto));
+
+    Map<String, Object> barData = dayAccountSummaryService.collectStatCommissionBar(searchAccountDto);
+    model.addAttribute("names", barData.get("names"));
+    model.addAttribute("commissionData", barData.get("commissionData"));
+    model.addAttribute("depositData", barData.get("depositData"));
     return "account/stat";
   }
 

@@ -16,7 +16,10 @@ import work.variety.trading.service.DayAccountSummaryService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangbin
@@ -81,6 +84,17 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
   @Override
   public AccountStatDto collectStatCommission(SearchAccountDto searchAccountDto) {
     return accountDao.collectStatCommission(searchAccountDto);
+  }
+
+  @Override
+  public Map<String, Object> collectStatCommissionBar(SearchAccountDto searchAccountDto) {
+    searchAccountDto.setPage(false);
+    List<AccountStatDto> list = accountDao.statCommission(searchAccountDto);
+    Map<String, Object> result = new HashMap<>(2);
+    result.put("names",list.stream().map(accountStatDto -> accountStatDto.getName()).collect(Collectors.toList()));
+    result.put("commissionData",list.stream().map(accountStatDto -> accountStatDto.getCommission()).collect(Collectors.toList()));
+    result.put("depositData",list.stream().map(accountStatDto -> accountStatDto.getDepositWithdrawal()).collect(Collectors.toList()));
+    return result;
   }
 
   private void setDefaultDate(SearchAccountDto searchAccountDto){

@@ -8,6 +8,7 @@ import work.variety.trading.dto.SearchDayAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author zhangbin
@@ -27,5 +28,7 @@ public interface DayAccountSummaryService {
   PageDto<AccountStatDto> statCommission(SearchAccountDto searchAccountDto);
 
   AccountStatDto collectStatCommission(SearchAccountDto searchAccountDto);
+
+  Map<String, Object> collectStatCommissionBar(SearchAccountDto searchAccountDto);
 
 }
