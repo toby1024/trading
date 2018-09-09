@@ -43,6 +43,7 @@
             </div>
 
             <button type="button" th:onclick="'javascript:search();'" class="btn btn-default">查询</button>
+            <button type="button" th:onclick="'javascript:excel();'" class="btn btn-success">导出</button>
         </form>
     </div>
     <div>
@@ -174,8 +175,16 @@
                     $("#pageNum").val(page);
                     $("form")[0].submit();
                 }
+
                 function search() {
+                    $($("form")[0]).attr("action", "/account/stat");
                     $("#pageNum").val(1);
+                    $("form")[0].submit();
+                }
+
+                function excel(){
+                    $("#pageNum").val(1);
+                    $($("form")[0]).attr("action", "/account/excel");
                     $("form")[0].submit();
                 }
             </script>

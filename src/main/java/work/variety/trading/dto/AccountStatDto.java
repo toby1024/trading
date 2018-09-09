@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountStatDto {
 
+  private String statDate;
   private Long clientInfoId;
   private Double commission;
   private String name;

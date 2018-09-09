@@ -57,8 +57,6 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     searchAccountDto.setOrderBy("a.clientInfoId, a.accountDay");
     searchAccountDto.setOrderDesc("desc");
 
-    setDefaultDate(searchAccountDto);
-
     int count = accountDao.count(searchAccountDto);
     List<AccountDto> accounts = accountDao.search(searchAccountDto);
     return new PageDto<>(accounts, searchAccountDto.getPageNum(), count, searchAccountDto.getPageSize());
@@ -71,8 +69,6 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
 
   @Override
   public PageDto<AccountStatDto> statCommission(SearchAccountDto searchAccountDto) {
-    setDefaultDate(searchAccountDto);
-
     searchAccountDto.setOrderBy("clientInfoId");
     searchAccountDto.setOrderDesc("desc");
 
@@ -88,8 +84,8 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
 
   @Override
   public Map<String, Object> collectStatCommissionBar(SearchAccountDto searchAccountDto) {
-    searchAccountDto.setPage(false);
-    List<AccountStatDto> list = accountDao.statCommission(searchAccountDto);
+    List<AccountStatDto> list = listStatCommission(searchAccountDto);
+
     Map<String, Object> result = new HashMap<>(2);
     result.put("names",list.stream().map(accountStatDto -> accountStatDto.getName()).collect(Collectors.toList()));
     result.put("commissionData",list.stream().map(accountStatDto -> accountStatDto.getCommission()).collect(Collectors.toList()));
@@ -97,26 +93,14 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     return result;
   }
 
-  private void setDefaultDate(SearchAccountDto searchAccountDto){
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    if (searchAccountDto.getStartDate() == null) {
-      Date startDate = DateUtils.addDays(new Date(), -30);
-      try {
-        searchAccountDto.setStartDate(sdf.parse(sdf.format(startDate)));
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-    }
-
-    if (searchAccountDto.getEndDate() == null) {
-      Date endDate = new Date();
-      try {
-        searchAccountDto.setEndDate(sdf.parse(sdf.format(endDate)));
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-    }
+  @Override
+  public List<AccountStatDto> listStatCommission(SearchAccountDto searchAccountDto) {
+    searchAccountDto.setPage(false);
+    List<AccountStatDto> list = accountDao.statCommission(searchAccountDto);
+    return list;
   }
+
+
 
   @Autowired
   private DayAccountSummaryMapper accountDao;

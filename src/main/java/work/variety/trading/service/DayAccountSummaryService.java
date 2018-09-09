@@ -8,6 +8,7 @@ import work.variety.trading.dto.SearchDayAccountDto;
 import work.variety.trading.entity.DayAccountSummary;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,5 +31,7 @@ public interface DayAccountSummaryService {
   AccountStatDto collectStatCommission(SearchAccountDto searchAccountDto);
 
   Map<String, Object> collectStatCommissionBar(SearchAccountDto searchAccountDto);
+
+  List<AccountStatDto> listStatCommission(SearchAccountDto searchAccountDto);
 
 }
