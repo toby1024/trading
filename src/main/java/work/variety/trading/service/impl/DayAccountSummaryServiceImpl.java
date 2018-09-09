@@ -63,6 +63,12 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
   }
 
   @Override
+  public List<AccountDto> seachList(SearchAccountDto searchAccountDto) {
+    searchAccountDto.setPage(false);
+    return accountDao.search(searchAccountDto);
+  }
+
+  @Override
   public AccountDto detail(Integer id) {
     return accountDao.detail(id);
   }

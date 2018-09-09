@@ -11,4 +11,8 @@ import work.variety.trading.entity.DayAccountSummary;
 public class AccountDto extends DayAccountSummary{
 
   private String name;
+  /**
+   * 资金使用率
+   */
+  private Double zjsly;
 }

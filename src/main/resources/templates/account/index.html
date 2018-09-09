@@ -37,6 +37,7 @@
             </div>
 
             <button type="button" th:onclick="'javascript:search();'" class="btn btn-default">查询</button>
+            <button type="button" th:onclick="'javascript:excel();'" class="btn btn-success">导出</button>
         </form>
     </div>
     <div>
@@ -51,6 +52,7 @@
                 <th>持仓盯市盈亏</th>
                 <th>手 续 费</th>
                 <th>保证金占用</th>
+                <th>资金使用率</th>
                 <th>市值权益</th>
                 <th>可用资金</th>
                 <th>风 险 度</th>
@@ -66,6 +68,7 @@
                 <td th:text="${account.mtmpl} "></td>
                 <td th:text="${account.commission} "></td>
                 <td th:text="${account.marginOccupied} "></td>
+                <td th:text="${account.zjsly} + '%' "></td>
                 <td th:text="${account.marketValueEquity} "></td>
                 <td th:text="${account.fundAvail} "></td>
                 <td th:text="${account.riskDegree}+'%'"></td>
@@ -110,6 +113,12 @@
                     $("form")[0].submit();
                 }
                 function search() {
+                    $($("form")[0]).attr("action", "/account");
+                    $("#pageNum").val(1);
+                    $("form")[0].submit();
+                }
+                function excel() {
+                    $($("form")[0]).attr("action", "/account/accountExcel");
                     $("#pageNum").val(1);
                     $("form")[0].submit();
                 }

@@ -24,6 +24,8 @@ public interface DayAccountSummaryService {
 
   PageDto<AccountDto> search(SearchAccountDto searchAccountDto);
 
+  List<AccountDto> seachList(SearchAccountDto searchAccountDto);
+
   AccountDto detail(Integer id);
 
   PageDto<AccountStatDto> statCommission(SearchAccountDto searchAccountDto);

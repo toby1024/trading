@@ -20,6 +20,7 @@ import work.variety.trading.service.ExportExcelService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +42,21 @@ public class AccountSummaryController {
     model.addAttribute("searchCondition", searchAccountDto);
 
     return "account/index";
+  }
+
+  @GetMapping("accountExcel")
+  public ResponseEntity accountExcel(SearchAccountDto searchAccountDto, HttpServletResponse response) throws UnsupportedEncodingException {
+    setDefaultDate(searchAccountDto);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-Type", "application/vnd.ms-excel");
+    response.setHeader("Content-Disposition", "attachment;filename="+new String("账户详情".getBytes(),"gbk") +".xls");
+
+    String[] column = {"accountDay","name","balanceBF","balanceCF","clientEquity","realizedPL","mtmpl","commission","marginOccupied","zjsly","marketValueEquity","fundAvail","riskDegree"};
+    String[] head = {"日期","姓名","期初结存","期末结存","客户权益","平仓盈亏","持仓盯市盈亏","手 续 费","保证金占用","资金使用率","市值权益","可用资金","风 险 度","详细"};
+    String sheetName = "账户详情";
+    ByteArrayOutputStream outputStream = exportExcelService.exportExcel(
+      dayAccountSummaryService.seachList(searchAccountDto), column, head, sheetName);
+    return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.CREATED);
   }
 
   @GetMapping("{id}/show")

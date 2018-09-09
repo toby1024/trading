@@ -36,6 +36,7 @@
     <result column="drzqlj" property="drzqlj"/>
     <result column="hbcdje" property="hbcdje"/>
     <result column="fdyk" property="fdyk"/>
+    <result column="zjsly" property="zjsly"/>
   </resultMap>
 
   <insert id="save" parameterType="work.variety.trading.entity.DayAccountSummary" keyProperty="id" useGeneratedKeys="true">
@@ -58,7 +59,7 @@
   </delete>
 
   <sql id="searchSql">
-    SELECT a.*, b.name FROM day_account_summary a left join client_info b ON a.clientInfoId = b.id
+    SELECT a.*, ROUND(a.marginOccupied/a.clientEquity*100,2) as zjsly, b.name FROM day_account_summary a left join client_info b ON a.clientInfoId = b.id
     <where>
       <if test="name!=null and name != ''">
         and b.name like concat('%', #{name}, '%')
