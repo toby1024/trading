@@ -24,8 +24,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangbin
@@ -42,7 +45,25 @@ public class AccountSummaryController {
     model.addAttribute("page", page);
     model.addAttribute("searchCondition", searchAccountDto);
 
+    List<String> dates = parseDates(searchAccountDto);
+    model.addAttribute("dates", dates);
+
+    List<Map> chartList = dayAccountSummaryService.inOutChart(searchAccountDto, dates);
+    model.addAttribute("lineData", chartList);
+    model.addAttribute("names", chartList.stream().map(map->{return map.get("name");}).collect(Collectors.toList()));
+
     return "account/index";
+  }
+
+  private List<String> parseDates(SearchAccountDto searchAccountDto) {
+    List<String> list = new ArrayList<>();
+    Date date = searchAccountDto.getStartDate();
+    Date endDate = searchAccountDto.getEndDate();
+    while (!date.after(endDate)) {
+      list.add(DateFormatUtils.format(date, "yy-MM-dd"));
+      date = DateUtils.addDays(date, 1);
+    }
+    return list;
   }
 
   @GetMapping("accountExcel")

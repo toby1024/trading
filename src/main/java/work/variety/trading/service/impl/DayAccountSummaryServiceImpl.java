@@ -3,6 +3,7 @@ package work.variety.trading.service.impl;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import work.variety.trading.dao.ClientInfoMapper;
 import work.variety.trading.dao.DayAccountSummaryMapper;
 import work.variety.trading.dto.AccountDto;
 import work.variety.trading.dto.AccountStatDto;
@@ -10,11 +11,13 @@ import work.variety.trading.dto.PageDto;
 import work.variety.trading.dto.PositionStatDto;
 import work.variety.trading.dto.SearchAccountDto;
 import work.variety.trading.dto.SearchDayAccountDto;
+import work.variety.trading.entity.ClientInfo;
 import work.variety.trading.entity.DayAccountSummary;
 import work.variety.trading.service.DayAccountSummaryService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +66,56 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
   }
 
   @Override
+  public List<Map> inOutChart(SearchAccountDto searchAccountDto, List<String> dates) {
+    searchAccountDto.setPage(false);
+    searchAccountDto.setOrderBy("a.accountDay");
+    searchAccountDto.setOrderDesc("asc");
+
+    List<Map> list = new ArrayList<>();
+    Integer oldClientInfoId = searchAccountDto.getClientInfoId();
+
+    List<ClientInfo> clientInfos = clientInfoDao.findById(oldClientInfoId);
+    clientInfos.forEach(clientInfo -> {
+      Map<String, Object> map = new HashMap<>();
+      map.put("name", clientInfo.getName());
+      searchAccountDto.setClientInfoId(clientInfo.getId());
+      List<AccountDto> accounts = accountDao.search(searchAccountDto);
+      if (dates.size() == accounts.size()) {
+        map.put("data", accounts.stream().map(AccountDto::getZjsly).collect(Collectors.toList()).toArray());
+      } else {
+        List datas = new ArrayList(dates.size());
+        for (int i = 0; i < dates.size(); i++) {
+          try {
+            Date day = DateUtils.parseDate(dates.get(i), "yy-MM-dd");
+            boolean noData = true;
+            for (int j = 0; j < accounts.size(); j++) {
+              if (DateUtils.isSameDay(day, accounts.get(j).getAccountDay())) {
+                datas.add(accounts.get(j).getZjsly());
+                noData = false;
+                break;
+              }
+            }
+            if (noData) {
+              datas.add(0);
+            }
+
+          } catch (ParseException e) {
+            e.printStackTrace();
+          }
+        }
+        map.put("data", datas);
+      }
+      map.put("type", "line");
+      map.put("stack", "资金使用率（%）");
+      list.add(map);
+    });
+
+
+    searchAccountDto.setClientInfoId(oldClientInfoId);
+    return list;
+  }
+
+  @Override
   public List<AccountDto> seachList(SearchAccountDto searchAccountDto) {
     searchAccountDto.setPage(false);
     return accountDao.search(searchAccountDto);
@@ -93,9 +146,9 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     List<AccountStatDto> list = listStatCommission(searchAccountDto);
 
     Map<String, Object> result = new HashMap<>(2);
-    result.put("names",list.stream().map(accountStatDto -> accountStatDto.getName()).collect(Collectors.toList()));
-    result.put("commissionData",list.stream().map(accountStatDto -> accountStatDto.getCommission()).collect(Collectors.toList()));
-    result.put("depositData",list.stream().map(accountStatDto -> accountStatDto.getDepositWithdrawal()).collect(Collectors.toList()));
+    result.put("names", list.stream().map(accountStatDto -> accountStatDto.getName()).collect(Collectors.toList()));
+    result.put("commissionData", list.stream().map(accountStatDto -> accountStatDto.getCommission()).collect(Collectors.toList()));
+    result.put("depositData", list.stream().map(accountStatDto -> accountStatDto.getDepositWithdrawal()).collect(Collectors.toList()));
     return result;
   }
 
@@ -106,8 +159,8 @@ public class DayAccountSummaryServiceImpl implements DayAccountSummaryService {
     return list;
   }
 
-
-
   @Autowired
   private DayAccountSummaryMapper accountDao;
+  @Autowired
+  private ClientInfoMapper clientInfoDao;
 }

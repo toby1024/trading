@@ -24,6 +24,8 @@ public interface DayAccountSummaryService {
 
   PageDto<AccountDto> search(SearchAccountDto searchAccountDto);
 
+  List<Map> inOutChart(SearchAccountDto searchAccountDto, List<String> dates);
+
   List<AccountDto> seachList(SearchAccountDto searchAccountDto);
 
   AccountDto detail(Integer id);
